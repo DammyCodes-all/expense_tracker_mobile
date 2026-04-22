@@ -1,10 +1,13 @@
-import { Text, View } from "react-native";
 import React from "react";
+import { View } from "react-native";
+import Header from "../../components/Header";
+import WealthCard from "../../components/WealthCard";
 
 export default function Overview() {
   return (
-    <View className="flex-1 items-center justify-center">
-      <Text className="text-2xl font-bold text-slate-800">Overview</Text>
+    <View className="flex-1">
+      <Header />
+      <WealthCard />
     </View>
   );
 }

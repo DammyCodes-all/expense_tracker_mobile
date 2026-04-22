@@ -30,7 +30,7 @@ export default function CustomTabBar({ state, navigation }: any) {
             <Pressable
               key={tab.name}
               onPress={() => navigation.navigate(tab.name)}
-              className={`flex-1 items-center gap-1 rounded-lg py-2 px-2 ${focused ? "bg-blue-100" : ""}`}
+              className={`flex-1 items-center gap-0.5 rounded-lg py-2 px-2 ${focused ? "bg-blue-100" : ""}`}
             >
               <View className="p-2">
                 <Icon
