@@ -12,7 +12,7 @@ export default function Overview() {
         {/* Allocations */}
         <View className="w-full flex flex-row justify-between items-center">
           <Text className="text-lg">ALLOCATIONS</Text>
-          <Text className="text-sm text-blue-600">View All</Text>
+          <Text className="font-semibold text-blue-600">View All</Text>
         </View>
       </View>
     </View>
