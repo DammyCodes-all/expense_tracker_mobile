@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { Text, View, Pressable } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 export default function Index() {
   const [count, setCount] = useState(0);
 
   return (
     <View className="flex-1 items-center justify-center bg-white px-4">
-      <Text className="text-2xl font-bold text-slate-800 mb-4">Tailwind Test</Text>
+      <Text className="text-2xl font-bold text-slate-800 mb-4">
+        Tailwind Test
+      </Text>
 
       <View className="w-48 h-32 bg-blue-500 rounded-lg mb-4 items-center justify-center shadow-lg">
         <Text className="text-white text-lg">Blue Box</Text>

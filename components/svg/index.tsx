@@ -26,3 +26,12 @@ export const SettingsIcon = (props: SvgProps) => (
     />
   </Svg>
 );
+
+export const OverviewIcon = (props: SvgProps) => (
+  <Svg xmlns="http://www.w3.org/2000/svg" fill="none" {...props}>
+    <Path
+      fill="#0047AB"
+      d="M10 6V0h8v6h-8M0 10V0h8v10H0m10 8V8h8v10h-8M0 18v-6h8v6H0"
+    />
+  </Svg>
+);
