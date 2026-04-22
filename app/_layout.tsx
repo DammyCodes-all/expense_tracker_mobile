@@ -1,11 +1,11 @@
-import { Stack } from "expo-router";
+import { Slot } from "expo-router";
+import { useColorScheme, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { useColorScheme } from "react-native";
 import "./global.css";
 
 export default function RootLayout() {
   const scheme = useColorScheme();
-  const backgroundColor = scheme === "dark" ? "#000000" : "#ffffff";
+  const backgroundColor = scheme === "dark" ? "#1a1a1a" : "#ffffff";
 
   return (
     <SafeAreaProvider>
@@ -13,7 +13,9 @@ export default function RootLayout() {
         style={{ flex: 1, backgroundColor }}
         edges={["top", "bottom"]}
       >
-        <Stack screenOptions={{ headerShown: false }} />
+        <View className="bg-neutral-50 h-full">
+          <Slot />
+        </View>
       </SafeAreaView>
     </SafeAreaProvider>
   );

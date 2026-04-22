@@ -1,44 +1,53 @@
 import React from "react";
-import { View, TouchableOpacity } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { OverviewIcon, BudgetIcon, InsightsIcon, SettingsIcon } from "./svg";
+import { BudgetIcon, InsightsIcon, OverviewIcon, SettingsIcon } from "./svg";
+
+const TAB_CONFIG = [
+  { name: "overview", label: "OVERVIEW", Icon: OverviewIcon },
+  { name: "budgets", label: "BUDGETS", Icon: BudgetIcon },
+  { name: "insights", label: "INSIGHTS", Icon: InsightsIcon },
+  { name: "settings", label: "SETTINGS", Icon: SettingsIcon },
+];
 
 export default function CustomTabBar({ state, navigation }: any) {
   const insets = useSafeAreaInsets();
 
   return (
     <View
-      className={`flex-row items-center justify-between mx-4 mb-4 px-3 py-2 rounded-2xl shadow-lg bg-white`}
-      style={{ paddingBottom: insets.bottom ? insets.bottom : 12 }}
+      className="rounded-3xl bg-white"
+      style={{
+        paddingBottom: (insets.bottom || 0) + 12,
+        elevation: 10,
+      }}
     >
-      {state.routes.map((route: any, idx: number) => {
-        const focused = state.index === idx;
-        let Icon = OverviewIcon;
-        if (route.name === "overview") Icon = OverviewIcon;
-        if (route.name === "budgets") Icon = BudgetIcon;
-        if (route.name === "insights") Icon = InsightsIcon;
-        if (route.name === "settings") Icon = SettingsIcon;
+      <View className="flex-row items-center justify-between px-3 py-3">
+        {TAB_CONFIG.map((tab, idx) => {
+          const focused = state.index === idx;
+          const { Icon } = tab;
 
-        return (
-          <TouchableOpacity
-            key={route.key}
-            onPress={() => navigation.navigate(route.name)}
-            className="flex-1 items-center"
-          >
-            <View
-              className={
-                focused ? "p-3 rounded-full bg-blue-50" : "p-3 rounded-full"
-              }
+          return (
+            <Pressable
+              key={tab.name}
+              onPress={() => navigation.navigate(tab.name)}
+              className={`flex-1 items-center gap-1 rounded-lg py-2 px-2 ${focused ? "bg-blue-100" : ""}`}
             >
-              <Icon
-                width={20}
-                height={20}
-                color={focused ? "#0f172a" : "#94A3B8"}
-              />
-            </View>
-          </TouchableOpacity>
-        );
-      })}
+              <View className="p-2">
+                <Icon
+                  width={20}
+                  height={20}
+                  color={focused ? "#0047AB" : "#94A3B8"}
+                />
+              </View>
+              <Text
+                className={`text-xs ${focused ? "text-blue-600 font-semibold" : "text-slate-500"}`}
+              >
+                {tab.label}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
     </View>
   );
 }
