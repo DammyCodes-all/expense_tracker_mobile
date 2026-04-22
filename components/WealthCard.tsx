@@ -1,6 +1,6 @@
+import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 
 interface WealthCardProps {
   amount?: string;
@@ -17,11 +17,15 @@ export default function WealthCard({
 }: WealthCardProps) {
   return (
     <LinearGradient
-      colors={["00327D", "#0047AB"]}
+      colors={["#001d4d", "#003d99"]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
-      style={{ borderRadius: 24, overflow: "hidden" }}
-      className="mx-4 mt-4 px-6 py-6"
+      style={{
+        marginTop: 16,
+        borderRadius: 24,
+        paddingHorizontal: 24,
+        paddingVertical: 24,
+      }}
     >
       <View className="flex-row items-center justify-between mb-6">
         <Text className="text-sm font-semibold text-blue-100">
