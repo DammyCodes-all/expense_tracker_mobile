@@ -1,24 +1,28 @@
-import React from "react";
-import { View, Text } from "react-native";
+import { useTransactions } from "@/context/transactions-context";
+import React, { useMemo } from "react";
+import { Text, View } from "react-native";
 import { LineChart } from "react-native-gifted-charts";
+import { buildSpendingTrendSeries } from "../lib/spending-metrics";
 
 interface SpendingTrendChartProps {
   data?: Array<{ value: number; label: string }>;
   dateRange?: string;
 }
 
-const DEFAULT_DATA = [
-  { value: 50, label: "W1" },
-  { value: 100, label: "W2" },
-  { value: 420, label: "W3" },
-  { value: 280, label: "W4" },
-  { value: 320, label: "W5" },
-];
-
 export default function SpendingTrendChart({
-  data = DEFAULT_DATA,
-  dateRange = "Oct 1 - Oct 15, 2023",
+  data,
+  dateRange,
 }: SpendingTrendChartProps) {
+  const { transactions } = useTransactions();
+
+  const derived = useMemo(
+    () => buildSpendingTrendSeries(transactions),
+    [transactions],
+  );
+
+  const chartData = data ?? derived.data;
+  const resolvedDateRange = dateRange ?? derived.dateRange;
+
   return (
     <View className="mt-6 rounded-3xl bg-white p-4 shadow">
       <View className="mb-4 flex flex-row items-center justify-between">
@@ -26,14 +30,14 @@ export default function SpendingTrendChart({
           <Text className="text-lg font-semibold text-gray-800">
             Spending Trend
           </Text>
-          <Text className="text-sm text-gray-500">{dateRange}</Text>
+          <Text className="text-sm text-gray-500">{resolvedDateRange}</Text>
         </View>
         <View className="h-3 w-3 rounded-full bg-blue-600" />
       </View>
 
       <View className="flex items-center justify-center">
         <LineChart
-          data={data}
+          data={chartData}
           height={200}
           showVerticalLines={false}
           curved
