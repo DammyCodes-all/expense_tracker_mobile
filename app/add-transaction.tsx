@@ -1,125 +1,195 @@
-import { useRouter } from "expo-router";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
-import {
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TextInput, View } from "react-native";
+import DropDownPicker from "react-native-dropdown-picker";
 import BackHeader from "../components/BackHeader";
 
 export default function AddTransaction() {
-  const router = useRouter();
-  const [description, setDescription] = React.useState("");
+  const [person, setPerson] = React.useState("");
+  const [date, setDate] = React.useState("");
+  const [allocation, setAllocation] = React.useState("");
+  const [allocationOpen, setAllocationOpen] = React.useState(false);
   const [amount, setAmount] = React.useState("");
-  const [category, setCategory] = React.useState("");
 
   const CATEGORIES = [
-    "Transport",
-    "Dining Out",
-    "Groceries",
-    "Utilities",
-    "Entertainment",
-    "Technology",
-    "Other",
+    { label: "Transport", value: "transport" },
+    { label: "Dining Out", value: "dining_out" },
+    { label: "Groceries", value: "groceries" },
+    { label: "Utilities", value: "utilities" },
+    { label: "Entertainment", value: "entertainment" },
+    { label: "Technology", value: "technology" },
+    { label: "Other", value: "other" },
   ];
 
-  const handleAdd = () => {
-    // TODO: Implement transaction creation logic
-    router.back();
+  const handleAmountChange = (rawValue: string) => {
+    const normalized = rawValue.replace(/,/g, ".");
+    const numericOnly = normalized.replace(/[^0-9.]/g, "");
+
+    // Keep only the first decimal point and clamp to 2 decimal places.
+    const [whole = "", ...rest] = numericOnly.split(".");
+    const decimals = rest.join("").slice(0, 2);
+
+    if (rest.length > 0) {
+      setAmount(`${whole}.${decimals}`);
+      return;
+    }
+
+    setAmount(whole);
   };
 
   return (
-    <View className="flex-1">
+    <View className="flex-1 mx-4 space-y-6">
       <BackHeader title="Add Transaction" />
-      <ScrollView className="flex-1" contentContainerStyle={{ padding: 16 }}>
-        <Text
-          className="text-2xl mb-6"
-          style={{ fontFamily: "Manrope_700Bold" }}
-        >
-          Add Transaction
-        </Text>
+      <View
+        className="flex-1 space-y-6"
+        style={{ padding: 12, paddingBottom: 32 }}
+      >
+        <View className="rounded-3xl bg-white w-full px-6 py-8 space-y-6 flex gap-6 shadow-sm">
+          {/* Person Field */}
+          <View className="flex gap-3">
+            <Text className="text-xs font-semibold text-gray-800 uppercase tracking-wider">
+              ADD TRANSACTION
+            </Text>
+            <View className="flex-row items-center bg-gray-100 rounded-lg px-4 py-3">
+              <MaterialCommunityIcons
+                name="account"
+                size={20}
+                color="#9CA3AF"
+                style={{ marginRight: 12 }}
+              />
+              <TextInput
+                placeholder="John Doe"
+                value={person}
+                onChangeText={setPerson}
+                placeholderTextColor="#D1D5DB"
+                className="flex-1 text-base text-gray-800"
+              />
+            </View>
+          </View>
 
-        {/* Amount Input */}
-        <View className="mb-6">
-          <Text className="text-sm font-semibold text-gray-600 mb-2">
-            Amount
-          </Text>
-          <TextInput
-            placeholder="$0.00"
-            value={amount}
-            onChangeText={setAmount}
-            keyboardType="decimal-pad"
-            className="border border-gray-300 rounded-lg p-4 text-lg"
-            placeholderTextColor="#999"
-          />
-        </View>
+          {/* Date Field */}
+          <View className="flex gap-3">
+            <Text className="text-xs font-semibold text-gray-800 uppercase tracking-wider">
+              ADD TRANSACTION
+            </Text>
+            <View className="flex-row items-center bg-gray-100 rounded-lg px-4 py-3">
+              <MaterialCommunityIcons
+                name="calendar"
+                size={20}
+                color="#9CA3AF"
+                style={{ marginRight: 12 }}
+              />
+              <TextInput
+                placeholder="11/24/2023"
+                value={date}
+                onChangeText={setDate}
+                placeholderTextColor="#D1D5DB"
+                className="flex-1 text-base text-gray-800"
+              />
+            </View>
+          </View>
 
-        {/* Description Input */}
-        <View className="mb-6">
-          <Text className="text-sm font-semibold text-gray-600 mb-2">
-            Description
-          </Text>
-          <TextInput
-            placeholder="What did you spend on?"
-            value={description}
-            onChangeText={setDescription}
-            className="border border-gray-300 rounded-lg p-4 text-base"
-            placeholderTextColor="#999"
-            multiline
-            numberOfLines={4}
-          />
-        </View>
-
-        {/* Category Selection */}
-        <View className="mb-6">
-          <Text className="text-sm font-semibold text-gray-600 mb-3">
-            Category
-          </Text>
-          <View className="flex-row flex-wrap gap-2">
-            {CATEGORIES.map((cat) => (
-              <TouchableOpacity
-                key={cat}
-                onPress={() => setCategory(cat)}
-                className={`px-4 py-2 rounded-full border ${
-                  category === cat
-                    ? "bg-blue-600 border-blue-600"
-                    : "bg-white border-gray-300"
-                }`}
-              >
-                <Text
-                  className={`${
-                    category === cat ? "text-white" : "text-gray-700"
-                  } font-medium`}
-                >
-                  {cat}
-                </Text>
-              </TouchableOpacity>
-            ))}
+          {/* Category Dropdown */}
+          <View className="flex gap-3">
+            <Text className="text-xs font-semibold text-gray-800 uppercase tracking-wider">
+              ADD CATEGORY
+            </Text>
+            <DropDownPicker
+              open={allocationOpen}
+              setOpen={setAllocationOpen}
+              value={allocation}
+              setValue={setAllocation}
+              items={CATEGORIES}
+              placeholder="Select Category"
+              // nestedScrollEnabled={true}
+              containerStyle={{
+                borderRadius: 8,
+                backgroundColor: "transparent",
+              }}
+              style={{
+                backgroundColor: "#F3F4F6",
+                borderColor: "transparent",
+                paddingVertical: 12,
+                paddingHorizontal: 16,
+              }}
+              textStyle={{
+                fontSize: 16,
+                color: "#1F2937",
+              }}
+              placeholderStyle={{
+                color: "#D1D5DB",
+              }}
+              dropDownContainerStyle={{
+                backgroundColor: "#F3F4F6",
+                borderColor: "transparent",
+                marginTop: 8,
+                paddingHorizontal: 16,
+              }}
+              labelStyle={{
+                fontSize: 16,
+                color: "#1F2937",
+              }}
+            />
           </View>
         </View>
 
-        {/* Action Buttons */}
-        <View className="flex-row gap-3 mt-8">
-          <TouchableOpacity
-            onPress={() => router.back()}
-            className="flex-1 bg-gray-200 rounded-lg py-4"
-          >
-            <Text className="text-center font-semibold text-gray-700">
-              Cancel
+        {/* Amount Field */}
+        <View className="mt-4 bg-white rounded-3xl p-6 shadow-sm relative overflow-hidden">
+          <View className="flex-row justify-between items-start mb-8">
+            <Text className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              AMOUNT
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={handleAdd}
-            className="flex-1 bg-blue-600 rounded-lg py-4"
-          >
-            <Text className="text-center font-semibold text-white">
-              Add Transaction
+            <View
+              className="bg-blue-700 px-6 py-3 absolute -right-6 -top-7"
+              style={styles.usdBadge}
+            >
+              <Text
+                className="text-white text-xs"
+                style={{ fontFamily: "Manrope_700Bold" }}
+              >
+                USD
+              </Text>
+            </View>
+          </View>
+          <View className="flex-row items-end">
+            <Text
+              className="text-gray-400 text-4xl mr-1"
+              style={styles.dollarSign}
+            >
+              $
             </Text>
-          </TouchableOpacity>
+            <TextInput
+              placeholder="0.00"
+              value={amount}
+              onChangeText={handleAmountChange}
+              keyboardType="decimal-pad"
+              className="flex-1 text-5xl text-blue-900"
+              multiline={false}
+              style={styles.amountInput}
+            />
+          </View>
         </View>
-      </ScrollView>
+      </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  usdBadge: {
+    borderBottomLeftRadius: 28,
+  },
+  dollarSign: {
+    fontFamily: "Manrope_700Bold",
+    includeFontPadding: false,
+    lineHeight: 52,
+    marginBottom: 2,
+  },
+  amountInput: {
+    fontFamily: "Manrope_700Bold",
+    includeFontPadding: false,
+    textAlignVertical: "bottom",
+    paddingVertical: 0,
+    lineHeight: 64,
+    height: 64,
+  },
+});

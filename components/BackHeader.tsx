@@ -1,4 +1,4 @@
-import { ArrowLeftIcon } from "@hugeicons/core-free-icons";
+import { ArrowLeft02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import { useRouter } from "expo-router";
 import React from "react";
@@ -18,7 +18,7 @@ export default function BackHeader({ title }: BackHeaderProps) {
         className="p-3 bg-white rounded-xl shadow-sm"
       >
         <HugeiconsIcon
-          icon={ArrowLeftIcon}
+          icon={ArrowLeft02Icon}
           size={24}
           color="#000"
           strokeWidth={2.3}
