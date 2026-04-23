@@ -1,15 +1,12 @@
 import React from "react";
 import { Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { BudgetIcon, InsightsIcon, OverviewIcon, SettingsIcon } from "./svg";
+import { BudgetIcon, OverviewIcon } from "./svg";
 
 const TAB_CONFIG = [
   { name: "overview", label: "OVERVIEW", Icon: OverviewIcon },
   { name: "budgets", label: "BUDGETS", Icon: BudgetIcon },
-  { name: "insights", label: "INSIGHTS", Icon: InsightsIcon },
-  { name: "settings", label: "SETTINGS", Icon: SettingsIcon },
 ];
-
 export default function CustomTabBar({ state, navigation }: any) {
   const insets = useSafeAreaInsets();
 
