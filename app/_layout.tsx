@@ -10,6 +10,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { Text as RNText, useColorScheme, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { TransactionsProvider } from "../context/transactions-context";
 import "./global.css";
 
 export const unstable_settings = {
@@ -64,9 +65,11 @@ export default function RootLayout() {
         style={{ flex: 1, backgroundColor }}
         edges={["top", "bottom"]}
       >
-        <View className="bg-[#F7F9FB] h-full">
-          <Slot />
-        </View>
+        <TransactionsProvider>
+          <View className="bg-[#F7F9FB] h-full">
+            <Slot />
+          </View>
+        </TransactionsProvider>
       </SafeAreaView>
     </SafeAreaProvider>
   );

@@ -2,37 +2,20 @@ import React from "react";
 import { Text, View } from "react-native";
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import {
-  ShoppingBag02Icon,
-  Car01Icon,
-  KitchenUtensilsIcon,
-  Money03Icon,
-} from "@hugeicons/core-free-icons";
-
-const ICON_MAP: Record<string, any> = {
-  car: Car01Icon,
-  cutlery: KitchenUtensilsIcon,
-  bag: ShoppingBag02Icon,
-  money: Money03Icon,
-};
-
-interface Transaction {
-  icon: string;
-  title: string;
-  category: string;
-  time: string;
-  amount: number;
-  date: string;
-  isIncome?: boolean;
-}
+  LedgerTransaction,
+  TRANSACTION_ICON_COMPONENTS,
+} from "../lib/transactions";
 
 interface TransactionCardProps {
-  transaction: Transaction;
+  transaction: LedgerTransaction;
 }
 
 export default function TransactionCard({ transaction }: TransactionCardProps) {
   const amountColor = transaction.isIncome ? "text-green-500" : "text-red-500";
   const amountSign = transaction.isIncome ? "+" : "-";
-  const iconObject = ICON_MAP[transaction.icon] || Money03Icon;
+  const iconObject =
+    TRANSACTION_ICON_COMPONENTS[transaction.icon] ||
+    TRANSACTION_ICON_COMPONENTS.note;
 
   return (
     <View className="mb-4 flex flex-row items-center rounded-xl bg-gray-200 p-4">

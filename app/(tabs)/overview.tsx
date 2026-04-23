@@ -1,13 +1,15 @@
-import React from "react";
-import { ScrollView, Text, View, TouchableOpacity } from "react-native";
-import { useRouter } from "expo-router";
-import Header from "../../components/Header";
-import WealthCard from "../../components/WealthCard";
-import CategoryCard from "../../components/CategoryCard";
-import SpendingTrendChart from "../../components/SpendingTrendChart";
-import TransactionCard from "../../components/TransactionCard";
 import { PlusSignIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react-native";
+import { useRouter } from "expo-router";
+import React from "react";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import CategoryCard from "../../components/CategoryCard";
+import Header from "../../components/Header";
+import SpendingTrendChart from "../../components/SpendingTrendChart";
+import TransactionCard from "../../components/TransactionCard";
+import WealthCard from "../../components/WealthCard";
+import { useTransactions } from "../../context/transactions-context";
+import { LedgerTransaction } from "../../lib/transactions";
 
 const CATEGORIES = [
   {
@@ -42,8 +44,9 @@ const CATEGORIES = [
   },
 ];
 
-const TRANSACTIONS = [
+const TRANSACTIONS: LedgerTransaction[] = [
   {
+    id: "seed_apple_store",
     icon: "bag",
     title: "Apple Store",
     category: "Technology",
@@ -51,8 +54,10 @@ const TRANSACTIONS = [
     amount: 1299.0,
     date: "OCT 12",
     isIncome: false,
+    createdAt: "2025-10-12T14:45:00.000Z",
   },
   {
+    id: "seed_dividend",
     icon: "money",
     title: "Dividend Payout",
     category: "Investment",
@@ -60,8 +65,10 @@ const TRANSACTIONS = [
     amount: 450.25,
     date: "OCT 11",
     isIncome: true,
+    createdAt: "2025-10-11T11:20:00.000Z",
   },
   {
+    id: "seed_dining",
     icon: "cutlery",
     title: "The Gilded Fork",
     category: "Dining",
@@ -69,8 +76,10 @@ const TRANSACTIONS = [
     amount: 240.5,
     date: "OCT 10",
     isIncome: false,
+    createdAt: "2025-10-10T20:15:00.000Z",
   },
   {
+    id: "seed_spotify",
     icon: "money",
     title: "Spotify Premium",
     category: "Entertainment",
@@ -78,11 +87,16 @@ const TRANSACTIONS = [
     amount: 9.99,
     date: "OCT 9",
     isIncome: false,
+    createdAt: "2025-10-09T10:30:00.000Z",
   },
 ];
 
 export default function Overview() {
   const router = useRouter();
+  const { transactions, isHydrated } = useTransactions();
+  const recentLedger = isHydrated
+    ? [...transactions, ...TRANSACTIONS]
+    : TRANSACTIONS;
 
   return (
     <View className="flex-1 relative">
@@ -120,8 +134,8 @@ export default function Overview() {
           </View>
 
           <View className="mt-4">
-            {TRANSACTIONS.map((transaction, index) => (
-              <TransactionCard key={index} transaction={transaction} />
+            {recentLedger.map((transaction) => (
+              <TransactionCard key={transaction.id} transaction={transaction} />
             ))}
           </View>
         </View>
