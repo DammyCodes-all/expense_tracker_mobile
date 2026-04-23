@@ -1,3 +1,4 @@
+import { useTransactions } from "@/context/transactions-context";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Text, View } from "react-native";
@@ -19,13 +20,24 @@ const formatCurrency = (value: number) =>
 
 export default function BudgetBurnCard({
   title = "MONTHLY BURN",
-  spent = 4280,
-  limit = 6850,
+  spent = undefined,
+  limit = undefined,
   status = "ON TRACK",
 }: BudgetBurnCardProps) {
-  const safeLimit = Math.max(limit, 1);
-  const progress = Math.min(Math.max(spent / safeLimit, 0), 1);
-  const left = Math.max(limit - spent, 0);
+  const { categories, categoryStats } = useTransactions();
+
+  const computedLimit = categories.reduce((s, c) => s + (c.budget || 0), 0);
+  const computedSpent = categories.reduce(
+    (s, c) => s + (categoryStats[c.id]?.spent || 0),
+    0,
+  );
+
+  const finalLimit = typeof limit === "number" ? limit : computedLimit || 1;
+  const finalSpent = typeof spent === "number" ? spent : computedSpent || 0;
+
+  const safeLimit = Math.max(finalLimit, 1);
+  const progress = Math.min(Math.max(finalSpent / safeLimit, 0), 1);
+  const left = Math.max(finalLimit - finalSpent, 0);
 
   return (
     <LinearGradient
@@ -53,7 +65,7 @@ export default function BudgetBurnCard({
             className="mt-1 text-[32px] leading-[36px] text-gray-100"
             style={{ fontFamily: "Manrope_700Bold" }}
           >
-            {formatCurrency(spent)}
+            {formatCurrency(finalSpent)}
           </Text>
         </View>
         <View className="rounded-full bg-[#0A8F5E] px-3 py-1">
@@ -77,7 +89,7 @@ export default function BudgetBurnCard({
           className="text-sm text-[#D5E6FF]"
           style={{ fontFamily: "Manrope_600SemiBold" }}
         >
-          {`${Math.round(progress * 100)}% of ${formatCurrency(limit)} limit`}
+          {`${Math.round(progress * 100)}% of ${formatCurrency(finalLimit)} limit`}
         </Text>
         <Text
           className="text-sm text-[#D5E6FF]"

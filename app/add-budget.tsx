@@ -21,6 +21,7 @@ export default function AddBudget() {
       name: name || "New Category",
       notes,
       budget: Number(budget) || 0,
+      amountSpent: 0,
       currency: "USD",
       createdAt: new Date().toISOString(),
     });

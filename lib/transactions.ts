@@ -24,6 +24,7 @@ export interface LedgerTransaction {
   icon: TransactionIconKey;
   title: string;
   category: string;
+  categoryId?: string;
   time: string;
   amount: number;
   date: string;
@@ -117,7 +118,8 @@ export const SEED_TRANSACTIONS: LedgerTransaction[] = [
     id: "seed_apple_store",
     icon: "bag",
     title: "Apple Store",
-    category: "Technology",
+    category: "Entertainment",
+    categoryId: "cat_entertainment",
     time: "2:45 PM",
     amount: 1299.0,
     date: "OCT 12",
@@ -139,7 +141,8 @@ export const SEED_TRANSACTIONS: LedgerTransaction[] = [
     id: "seed_dining",
     icon: "cutlery",
     title: "The Gilded Fork",
-    category: "Dining",
+    category: "Dining Out",
+    categoryId: "cat_dining",
     time: "8:15 PM",
     amount: 240.5,
     date: "OCT 10",
@@ -151,6 +154,7 @@ export const SEED_TRANSACTIONS: LedgerTransaction[] = [
     icon: "money",
     title: "Spotify Premium",
     category: "Entertainment",
+    categoryId: "cat_entertainment",
     time: "10:30 AM",
     amount: 9.99,
     date: "OCT 9",

@@ -31,9 +31,15 @@ export default function CategoryCard({
   iconColor = "#0047AB",
 }: CategoryCardProps) {
   const iconObject = ICON_MAP[icon] || Money03Icon;
-  const percentageSpent = (amount / budget) * 100;
-  const amountLeft = budget - amount;
-  const isOverBudget = amount > budget;
+  const safeBudget = Math.max(budget, 0);
+  const percentageSpent =
+    safeBudget > 0
+      ? Math.min((amount / safeBudget) * 100, 100)
+      : amount > 0
+        ? 100
+        : 0;
+  const amountLeft = Math.max(safeBudget - amount, 0);
+  const isOverBudget = amount > safeBudget;
 
   // Determine progress bar color based on percentage
   let progressBarColor = "#0047AB";
@@ -65,13 +71,13 @@ export default function CategoryCard({
         className="text-xl text-blue-700 mb-2"
         style={{ fontFamily: "Manrope_700Bold" }}
       >
-        ${amount}
+        ${amount.toFixed(2)}
       </Text>
 
       <View className="bg-slate-200 rounded-full h-2 mb-1.5 overflow-hidden">
         <View
           style={{
-            width: `${Math.min(percentageSpent, 100)}%`,
+            width: `${Math.max(Math.min(percentageSpent, 100), 0)}%`,
             height: "100%",
             backgroundColor: progressBarColor,
           }}

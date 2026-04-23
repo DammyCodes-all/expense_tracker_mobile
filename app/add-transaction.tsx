@@ -25,8 +25,8 @@ import { Dropdown } from "react-native-element-dropdown";
 import BackHeader from "../components/BackHeader";
 import UsdAmountInput from "../components/form/UsdAmountInput";
 import { useTransactions } from "../context/transactions-context";
-import { LedgerTransaction } from "../lib/transactions";
 import { categoriesToOptions } from "../lib/categories";
+import { LedgerTransaction } from "../lib/transactions";
 
 export default function AddTransaction() {
   const router = useRouter();
@@ -97,6 +97,7 @@ export default function AddTransaction() {
       icon: (selectedCategoryObj?.icon as any) || "note",
       title: person.trim(),
       category: selectedCategoryObj?.name || "Other",
+      categoryId: selectedCategoryObj?.id,
       time: formatTime(now),
       amount: amountValue,
       date: date.trim(),

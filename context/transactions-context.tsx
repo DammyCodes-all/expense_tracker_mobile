@@ -8,8 +8,16 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { LedgerTransaction, SEED_TRANSACTIONS } from "../lib/transactions";
 import { Category, SEED_CATEGORIES } from "../lib/categories";
+import { LedgerTransaction, SEED_TRANSACTIONS } from "../lib/transactions";
+
+export interface CategoryStat {
+  spent: number;
+  budget: number;
+  percentSpent: number;
+  amountLeft: number;
+  isOverBudget: boolean;
+}
 
 const TRANSACTIONS_STORAGE_KEY = "expense_tracker_transactions_v1";
 const CATEGORIES_STORAGE_KEY = "expense_tracker_categories_v1";
@@ -24,6 +32,7 @@ interface TransactionsContextValue {
   addCategory: (category: Category) => void;
   updateCategory: (category: Category) => void;
   removeCategory: (categoryId: string) => void;
+  categoryStats: Record<string, CategoryStat>;
 }
 
 const TransactionsContext = createContext<TransactionsContextValue | undefined>(
@@ -125,6 +134,45 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
     setCategories((previous) => previous.filter((c) => c.id !== categoryId));
   }, []);
 
+  const categoryStats = useMemo(() => {
+    const spentByCategoryId: Record<string, number> = {};
+
+    for (const transaction of transactions) {
+      if (transaction.isIncome || !transaction.categoryId) {
+        continue;
+      }
+
+      spentByCategoryId[transaction.categoryId] =
+        (spentByCategoryId[transaction.categoryId] || 0) + transaction.amount;
+    }
+
+    return categories.reduce<Record<string, CategoryStat>>(
+      (stats, category) => {
+        const spent = spentByCategoryId[category.id] || 0;
+        const budget = category.budget || 0;
+        const safeBudget = Math.max(budget, 0);
+        const amountLeft = Math.max(safeBudget - spent, 0);
+        const percentSpent =
+          safeBudget > 0
+            ? Math.min((spent / safeBudget) * 100, 100)
+            : spent > 0
+              ? 100
+              : 0;
+
+        stats[category.id] = {
+          spent,
+          budget: safeBudget,
+          percentSpent,
+          amountLeft,
+          isOverBudget: spent > safeBudget,
+        };
+
+        return stats;
+      },
+      {},
+    );
+  }, [categories, transactions]);
+
   const value = useMemo(
     () => ({
       transactions,
@@ -136,6 +184,7 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
       addCategory,
       updateCategory,
       removeCategory,
+      categoryStats,
     }),
     [
       transactions,
@@ -146,6 +195,7 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
       addCategory,
       updateCategory,
       removeCategory,
+      categoryStats,
     ],
   );
 

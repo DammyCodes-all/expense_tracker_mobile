@@ -18,7 +18,7 @@ import { useTransactions } from "../../context/transactions-context";
 
 export default function Overview() {
   const router = useRouter();
-  const { transactions, isHydrated, categories } = useTransactions();
+  const { transactions, categories, categoryStats } = useTransactions();
 
   return (
     <View className="flex-1 relative">
@@ -37,15 +37,19 @@ export default function Overview() {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ paddingHorizontal: 16, gap: 12 }}
           >
-            {(categories || []).map((category) => (
-              <CategoryCard
-                key={category.id}
-                title={category.name}
-                amount={0}
-                budget={category.budget || 0}
-                icon={category.icon}
-              />
-            ))}
+            {(categories || []).map((category) => {
+              const stat = categoryStats[category.id];
+
+              return (
+                <CategoryCard
+                  key={category.id}
+                  title={category.name}
+                  amount={stat?.spent ?? category.amountSpent ?? 0}
+                  budget={stat?.budget ?? category.budget ?? 0}
+                  icon={category.icon ?? "bag"}
+                />
+              );
+            })}
           </ScrollView>
           {/* Spending Trend Chart */}
           <SpendingTrendChart />
