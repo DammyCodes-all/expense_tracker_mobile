@@ -1,12 +1,12 @@
-import React from "react";
-import { Text, View } from "react-native";
-import { HugeiconsIcon } from "@hugeicons/react-native";
 import {
-  ShoppingBag02Icon,
   Car01Icon,
   KitchenUtensilsIcon,
   Money03Icon,
+  ShoppingBag02Icon,
 } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react-native";
+import React from "react";
+import { Text, View } from "react-native";
 
 const ICON_MAP: Record<string, any> = {
   car: Car01Icon,
