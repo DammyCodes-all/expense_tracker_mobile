@@ -31,8 +31,8 @@ export default function WealthCard({
         <Text className="text-sm font-semibold text-blue-100">
           LIQUID WEALTH PORTFOLIO
         </Text>
-        <View className="rounded-full bg-teal-600 px-3 py-1">
-          <Text className="text-sm font-semibold text-white">
+        <View className="rounded-full bg-[#4EDEA3]/20 px-3 py-1">
+          <Text className="text-sm font-semibold text-green-600">
             {percentageChange}
           </Text>
         </View>

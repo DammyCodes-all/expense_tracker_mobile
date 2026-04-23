@@ -13,7 +13,7 @@ export default function RootLayout() {
         style={{ flex: 1, backgroundColor }}
         edges={["top", "bottom"]}
       >
-        <View className="bg-neutral-50 h-full">
+        <View className="bg-[#F7F9FB] h-full">
           <Slot />
         </View>
       </SafeAreaView>
