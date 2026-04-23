@@ -1,6 +1,7 @@
 import React from "react";
 import { Image, Pressable, Text, View } from "react-native";
-import { BellIcon } from "./svg";
+import { HugeiconsIcon } from "@hugeicons/react-native";
+import { BellDotIcon } from "@hugeicons/core-free-icons";
 
 export default function Header() {
   return (
@@ -20,7 +21,7 @@ export default function Header() {
         </View>
 
         <View className="p-3 rounded-xl grid place-items-center bg-white  shadow-sm">
-          <BellIcon width={24} height={24} />
+          <HugeiconsIcon icon={BellDotIcon} size={24} />
         </View>
       </View>
     </View>

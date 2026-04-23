@@ -1,12 +1,25 @@
 import React from "react";
 import { Text, View } from "react-native";
-import { SvgProps } from "react-native-svg";
+import { HugeiconsIcon } from "@hugeicons/react-native";
+import {
+  ShoppingBag02Icon,
+  Car01Icon,
+  KitchenUtensilsIcon,
+  Money03Icon,
+} from "@hugeicons/core-free-icons";
+
+const ICON_MAP: Record<string, any> = {
+  car: Car01Icon,
+  cutlery: KitchenUtensilsIcon,
+  bag: ShoppingBag02Icon,
+  money: Money03Icon,
+};
 
 interface CategoryCardProps {
   title: string;
   amount: number;
   budget: number;
-  icon: React.ComponentType<SvgProps>;
+  icon: string;
   iconColor?: string;
 }
 
@@ -14,9 +27,10 @@ export default function CategoryCard({
   title,
   amount,
   budget,
-  icon: Icon,
+  icon,
   iconColor = "#0047AB",
 }: CategoryCardProps) {
+  const iconObject = ICON_MAP[icon] || Money03Icon;
   const percentageSpent = (amount / budget) * 100;
   const amountLeft = budget - amount;
   const isOverBudget = amount > budget;
@@ -41,7 +55,7 @@ export default function CategoryCard({
     >
       <View className="items-start mb-3">
         <View className="p-2 rounded-full bg-slate-100 grid place-items-center">
-          <Icon width={24} height={24} color={iconColor} />
+          <HugeiconsIcon icon={iconObject} size={18} color={iconColor} />
         </View>
       </View>
 
