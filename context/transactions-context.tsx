@@ -1,5 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { createContext, ReactNode, useEffect, useState } from "react";
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { LedgerTransaction } from "../lib/transactions";
 
 const TRANSACTIONS_STORAGE_KEY = "expense_tracker_transactions_v1";
@@ -40,7 +46,7 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
     hydrate();
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isHydrated) {
       return;
     }
@@ -74,7 +80,7 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
 }
 
 export function useTransactions() {
-  const context = React.useContext(TransactionsContext);
+  const context = useContext(TransactionsContext);
 
   if (!context) {
     throw new Error("useTransactions must be used within TransactionsProvider");

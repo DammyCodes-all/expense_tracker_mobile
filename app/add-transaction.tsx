@@ -1,5 +1,6 @@
 import {
   Calendar03Icon,
+  ChevronDown,
   Menu01Icon,
   UserIcon,
 } from "@hugeicons/core-free-icons";
@@ -17,7 +18,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import DropDownPicker from "react-native-dropdown-picker";
+import { Dropdown } from "react-native-element-dropdown";
 import BackHeader from "../components/BackHeader";
 import { useTransactions } from "../context/transactions-context";
 import {
@@ -97,6 +98,7 @@ export default function AddTransaction() {
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{ padding: 12, paddingBottom: 32 }}
+          nestedScrollEnabled
         >
           <View className="space-y-6">
             <View className="rounded-3xl bg-white w-full px-6 py-8 flex gap-6 shadow-sm">
@@ -149,46 +151,55 @@ export default function AddTransaction() {
                 <Text className="text-xs font-semibold text-gray-800 uppercase tracking-wider">
                   ADD CATEGORY
                 </Text>
-                <DropDownPicker
-                  open={allocationOpen}
-                  setOpen={setAllocationOpen}
+                <Dropdown
+                  data={CATEGORY_OPTIONS}
+                  labelField="label"
+                  valueField="value"
                   value={allocation}
-                  setValue={setAllocation}
-                  items={CATEGORY_OPTIONS}
+                  onChange={(item) => setAllocation(item.value)}
                   placeholder="Select Category"
-                  containerStyle={{
-                    borderRadius: 8,
-                    backgroundColor: "transparent",
-                  }}
+                  maxHeight={220}
                   style={{
                     backgroundColor: "#F3F4F6",
-                    borderColor: "transparent",
+                    borderColor: "#BFDBFE",
+                    borderWidth: 1.5,
+                    borderRadius: 12,
+                    paddingHorizontal: 16,
                     paddingVertical: 12,
-                    paddingHorizontal: 16,
                   }}
-                  textStyle={{
-                    fontSize: 16,
-                    color: "#1F2937",
+                  containerStyle={{
+                    backgroundColor: "#F9FAFB",
+                    borderColor: "#E5E7EB",
+                    borderWidth: 1,
+                    borderRadius: 16,
+                    marginTop: 6,
+                    overflow: "hidden",
                   }}
-                  placeholderStyle={{
-                    color: "#D1D5DB",
+                  placeholderStyle={{ color: "#D1D5DB", fontSize: 15 }}
+                  selectedTextStyle={{ color: "#1F2937", fontSize: 15 }}
+                  activeColor="#EFF6FF"
+                  itemContainerStyle={{
+                    borderRadius: 12,
+                    marginHorizontal: 8,
+                    marginVertical: 3,
                   }}
-                  dropDownContainerStyle={{
-                    backgroundColor: "#F3F4F6",
-                    borderColor: "transparent",
-                    marginTop: 8,
-                    paddingHorizontal: 16,
-                  }}
-                  labelStyle={{
-                    fontSize: 16,
-                    color: "#1F2937",
-                  }}
+                  itemTextStyle={{ color: "#374151", fontSize: 15 }}
+                  renderRightIcon={() => (
+                    <HugeiconsIcon
+                      icon={ChevronDown}
+                      size={18}
+                      color="#9CA3AF"
+                    />
+                  )}
                 />
               </View>
             </View>
 
             {/* Amount Card */}
-            <View className="mt-4 bg-white rounded-3xl p-6 shadow-sm relative overflow-hidden">
+            <View
+              className="mt-4 bg-white rounded-3xl p-6 shadow-sm relative overflow-hidden z-10"
+              style={{ zIndex: -10 }}
+            >
               <View className="flex-row justify-between items-start mb-8">
                 <Text className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   AMOUNT
@@ -236,6 +247,7 @@ export default function AddTransaction() {
                   borderColor: "#93C5FD",
                   borderRadius: 12,
                   padding: 12,
+                  zIndex: -10,
                   backgroundColor: "#FFFFFF",
                 }}
               >
