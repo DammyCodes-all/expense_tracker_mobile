@@ -2,6 +2,7 @@ import { useTransactions } from "@/context/transactions-context";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Text, View } from "react-native";
+import { buildBudgetSummary } from "../lib/spending-metrics";
 
 interface BudgetBurnCardProps {
   title?: string;
@@ -24,16 +25,12 @@ export default function BudgetBurnCard({
   limit = undefined,
   status = "ON TRACK",
 }: BudgetBurnCardProps) {
-  const { categories, categoryStats } = useTransactions();
+  const { categories, transactions } = useTransactions();
 
-  const computedLimit = categories.reduce((s, c) => s + (c.budget || 0), 0);
-  const computedSpent = categories.reduce(
-    (s, c) => s + (categoryStats[c.id]?.spent || 0),
-    0,
-  );
+  const budgetSummary = buildBudgetSummary(categories, transactions);
 
-  const finalLimit = typeof limit === "number" ? limit : computedLimit || 1;
-  const finalSpent = typeof spent === "number" ? spent : computedSpent || 0;
+  const finalLimit = typeof limit === "number" ? limit : budgetSummary.totalBudget || 1;
+  const finalSpent = typeof spent === "number" ? spent : budgetSummary.totalSpent || 0;
 
   const safeLimit = Math.max(finalLimit, 1);
   const progress = Math.min(Math.max(finalSpent / safeLimit, 0), 1);

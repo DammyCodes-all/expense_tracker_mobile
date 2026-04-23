@@ -3,7 +3,10 @@ import { PieChart } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import React, { useMemo } from "react";
 import { Text, View } from "react-native";
-import { buildSpendingVelocitySeries } from "../lib/spending-metrics";
+import {
+  buildBudgetSummary,
+  buildSpendingVelocitySeries,
+} from "../lib/spending-metrics";
 
 interface Props {
   data?: number[];
@@ -20,7 +23,7 @@ export default function SpendingVelocityChart({
   percentChange,
   remaining,
 }: Props) {
-  const { transactions, categoryStats } = useTransactions();
+  const { transactions, categories } = useTransactions();
 
   const derived = useMemo(
     () => buildSpendingVelocitySeries(transactions),
@@ -31,12 +34,7 @@ export default function SpendingVelocityChart({
   const chartBaseline: number[] = baseline ?? derived.baseline;
   const chartLabels: string[] = labels ?? derived.labels;
   const chartPercentChange: number = percentChange ?? derived.percentChange;
-  const chartRemaining =
-    remaining ??
-    Object.values(categoryStats).reduce(
-      (sum, stat) => sum + stat.amountLeft,
-      0,
-    );
+  const chartRemaining = remaining ?? buildBudgetSummary(categories, transactions).remaining;
 
   const MAX_HEIGHT = 120; // px
   const seriesMax = Math.max(...chartBaseline, ...chartData, 1);

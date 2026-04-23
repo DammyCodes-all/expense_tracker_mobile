@@ -1,3 +1,4 @@
+import { Category } from "./categories";
 import { LedgerTransaction } from "./transactions";
 
 export interface TrendPoint {
@@ -139,5 +140,45 @@ export function buildSpendingVelocitySeries(transactions: LedgerTransaction[]) {
     baseline,
     labels,
     percentChange,
+  };
+}
+
+export function buildBudgetSummary(
+  categories: Category[],
+  transactions: LedgerTransaction[],
+) {
+  const spentByCategoryId: Record<string, number> = {};
+
+  for (const transaction of transactions) {
+    if (transaction.isIncome || !transaction.categoryId) {
+      continue;
+    }
+
+    spentByCategoryId[transaction.categoryId] =
+      (spentByCategoryId[transaction.categoryId] || 0) + transaction.amount;
+  }
+
+  const totalBudget = categories.reduce(
+    (sum, category) => sum + Math.max(category.budget || 0, 0),
+    0,
+  );
+  const totalSpent = categories.reduce(
+    (sum, category) => sum + (spentByCategoryId[category.id] || 0),
+    0,
+  );
+  const remaining = totalBudget - totalSpent;
+  const percentSpent =
+    totalBudget > 0
+      ? (totalSpent / totalBudget) * 100
+      : totalSpent > 0
+        ? 100
+        : 0;
+
+  return {
+    totalBudget,
+    totalSpent,
+    remaining,
+    percentSpent,
+    isOverBudget: remaining < 0,
   };
 }
