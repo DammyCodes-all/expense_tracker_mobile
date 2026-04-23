@@ -34,7 +34,6 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
             setTransactions(parsed);
           }
         } else {
-          // Initialize with seed data on first app load
           setTransactions(SEED_TRANSACTIONS);
           await AsyncStorage.setItem(
             TRANSACTIONS_STORAGE_KEY,

@@ -49,7 +49,7 @@ export default function RecentLedgers() {
               >
                 New Entry
               </Text>
-              <Text className="text-sm text-gray-500 mb-6">
+              <Text className="text-sm text-gray-500 mb-6 font-sans">
                 Record a new Allocation
               </Text>
               <Pressable

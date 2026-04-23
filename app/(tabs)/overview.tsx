@@ -61,7 +61,7 @@ export default function Overview() {
           <WealthCard />
           {/* Allocations */}
           <View className="w-full flex mt-4 px-4 flex-row justify-between items-center font-semibold">
-            <Text className="text-lg">Allocations</Text>
+            <Text className="text-lg font-sans">Allocations</Text>
             <Text className="font-semibold text-blue-600">View All</Text>
           </View>
           <ScrollView
@@ -84,7 +84,7 @@ export default function Overview() {
           <SpendingTrendChart />
 
           <View className="w-full flex mt-4 px-4 flex-row justify-between items-center font-semibold">
-            <Text className="text-lg">Recent Ledger</Text>
+            <Text className="text-lg font-sans">Recent Ledger</Text>
             <Pressable onPress={() => router.push("/recent-ledgers")}>
               <Text className="font-semibold text-blue-600">View All</Text>
             </Pressable>
