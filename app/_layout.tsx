@@ -13,10 +13,6 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { TransactionsProvider } from "../context/transactions-context";
 import "./global.css";
 
-export const unstable_settings = {
-  anchor: "(tabs)",
-};
-
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
 export default function RootLayout() {

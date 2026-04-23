@@ -1,24 +1,16 @@
+import {
+  ArrowRight,
+  NeutralIcon,
+  Shield01Icon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react-native";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
-
-function FaceBadge() {
-  return (
-    <View className="h-14 w-14 items-center justify-center rounded-full bg-[#D9E6FF] shadow-sm">
-      <View className="h-7 w-7 items-center justify-center rounded-full border-2 border-[#0F2D5C]">
-        <View className="absolute top-[6px] left-[8px] h-1.5 w-1.5 rounded-full bg-[#0F2D5C]" />
-        <View className="absolute top-[6px] right-[8px] h-1.5 w-1.5 rounded-full bg-[#0F2D5C]" />
-        <View className="absolute bottom-[6px] h-2 w-3 rounded-b-full border-b-2 border-[#0F2D5C]" />
-      </View>
-    </View>
-  );
-}
 
 function ShieldPill() {
   return (
     <View className="flex-row items-center gap-2 rounded-full border border-[#D9E6FF] bg-white px-4 py-2 shadow-sm">
-      <View className="h-4 w-4 items-center justify-center rounded-full bg-[#0E2D5A]">
-        <View className="h-2 w-2 rounded-full border border-white" />
-      </View>
+      <HugeiconsIcon icon={Shield01Icon} className="text-[#0E4EDB]" />
       <Text
         className="text-[12px] text-[#7A879A]"
         style={{ fontFamily: "Manrope_600SemiBold" }}
@@ -29,12 +21,12 @@ function ShieldPill() {
   );
 }
 
-export default function Livenesserification() {
+export default function LivenessVerification() {
   return (
     <View className="flex-1 bg-[#EFF4FB]">
       <View className="flex-1 items-center justify-center px-6">
         <View className="w-full max-w-[320px] items-center">
-          <FaceBadge />
+          <HugeiconsIcon icon={NeutralIcon} />
 
           <Text
             className="mt-5 text-center text-[30px] leading-[34px] text-[#0C2A57]"
@@ -84,7 +76,11 @@ export default function Livenesserification() {
               >
                 Start Verification
               </Text>
-              <Text className="text-[18px] text-white">→</Text>
+              <HugeiconsIcon
+                icon={ArrowRight}
+                size={16}
+                className="text-white"
+              />
             </View>
           </Pressable>
         </View>
