@@ -47,14 +47,14 @@ export default function CategoryCard({
 
   return (
     <View
-      className="rounded-2xl p-4 bg-white"
+      className="bg-gray-200 rounded-2xl p-4 "
       style={{
         width: 160,
         minHeight: 160,
       }}
     >
       <View className="items-start mb-3">
-        <View className="p-2 rounded-full bg-slate-100 grid place-items-center">
+        <View className="p-2 rounded-full bg-white grid place-items-center">
           <HugeiconsIcon icon={iconObject} size={18} color={iconColor} />
         </View>
       </View>

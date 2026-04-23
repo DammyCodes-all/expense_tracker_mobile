@@ -20,7 +20,7 @@ export default function Header() {
           </Text>
         </View>
 
-        <View className="p-3 rounded-xl grid place-items-center bg-white  shadow-sm">
+        <View className="p-3 rounded-xl grid place-items-center bg-white shadow-sm">
           <HugeiconsIcon icon={BellDotIcon} size={24} />
         </View>
       </View>

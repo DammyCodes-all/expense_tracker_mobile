@@ -35,8 +35,8 @@ export default function TransactionCard({ transaction }: TransactionCardProps) {
   const iconObject = ICON_MAP[transaction.icon] || Money03Icon;
 
   return (
-    <View className="mb-4 flex flex-row items-center rounded-xl bg-gray-50 p-4">
-      <View className="mr-4 flex h-10 w-10 items-center justify-center rounded-lg bg-gray-200">
+    <View className="mb-4 flex flex-row items-center rounded-xl bg-gray-200 p-4">
+      <View className="mr-4 flex h-10 w-10 items-center justify-center rounded-xl bg-white">
         <HugeiconsIcon icon={iconObject} size={20} />
       </View>
 

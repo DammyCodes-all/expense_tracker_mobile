@@ -1,10 +1,13 @@
 import React from "react";
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View, TouchableOpacity } from "react-native";
+import { useRouter } from "expo-router";
 import Header from "../../components/Header";
 import WealthCard from "../../components/WealthCard";
 import CategoryCard from "../../components/CategoryCard";
 import SpendingTrendChart from "../../components/SpendingTrendChart";
 import TransactionCard from "../../components/TransactionCard";
+import { PlusSignIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react-native";
 
 const CATEGORIES = [
   {
@@ -79,8 +82,10 @@ const TRANSACTIONS = [
 ];
 
 export default function Overview() {
+  const router = useRouter();
+
   return (
-    <View className="flex-1">
+    <View className="flex-1 relative">
       <Header />
       <ScrollView showsVerticalScrollIndicator={false} className="">
         <View className="mx-4 space-y-6">
@@ -116,14 +121,26 @@ export default function Overview() {
 
           <View className="mt-4">
             {TRANSACTIONS.map((transaction, index) => (
-              <TransactionCard
-                key={index}
-                transaction={transaction}
-              />
+              <TransactionCard key={index} transaction={transaction} />
             ))}
           </View>
         </View>
       </ScrollView>
+
+      {/* Floating Action Button */}
+      <TouchableOpacity
+        onPress={() => router.push("/add-transaction")}
+        className="absolute bottom-6 right-6 w-14 h-14 bg-blue-600 rounded-2xl items-center justify-center"
+        style={{
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.3,
+          shadowRadius: 8,
+          elevation: 8,
+        }}
+      >
+        <HugeiconsIcon icon={PlusSignIcon} size={24} color="#fff" />
+      </TouchableOpacity>
     </View>
   );
 }

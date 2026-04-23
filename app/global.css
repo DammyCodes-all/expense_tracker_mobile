@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  /* Primary sans mapping (used by `font-sans`) */
+  .font-sans {
+    font-family: "Manrope_400Regular";
+  }
+
+  /* Weight-specific mappings (do NOT include font-weight) */
+  .font-normal {
+    font-family: "Manrope_400Regular";
+  }
+
+  .font-medium {
+    font-family: "Manrope_500Medium";
+  }
+
+  .font-semibold {
+    font-family: "Manrope_600SemiBold";
+  }
+
+  .font-bold {
+    font-family: "Manrope_700Bold";
+  }
+
+  .font-black {
+    font-family: "Manrope_700Bold";
+  }
+
+  .font-manrope-700 {
+    font-family: "Manrope_700Bold";
+  }
+}

@@ -17,7 +17,7 @@ export default function WealthCard({
 }: WealthCardProps) {
   return (
     <LinearGradient
-      colors={["#001d4d", "#003d99"]}
+      colors={["#00327D", "#0047AB"]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={{
@@ -47,7 +47,7 @@ export default function WealthCard({
       <View className="flex-row gap-4">
         <Pressable
           onPress={onDeposit}
-          className="flex-1 rounded-2xl bg-blue-800 py-4"
+          className="flex-1 rounded-2xl bg-white/10 py-4"
         >
           <Text className="text-center font-bold text-white text-lg">
             DEPOSIT
@@ -56,7 +56,7 @@ export default function WealthCard({
 
         <Pressable
           onPress={onWithdraw}
-          className="flex-1 rounded-2xl bg-blue-800 py-4"
+          className="flex-1 rounded-2xl bg-white/10 py-4"
         >
           <Text className="text-center font-bold text-white text-lg">
             WITHDRAW
