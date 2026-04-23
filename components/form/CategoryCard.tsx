@@ -1,7 +1,7 @@
-import React from "react";
-import { View, Text, TextInput, StyleSheet } from "react-native";
+import { Menu01Icon, UserIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react-native";
-import { UserIcon, Menu01Icon } from "@hugeicons/core-free-icons";
+import React from "react";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 
 interface CategoryCardProps {
   name?: string;
@@ -23,7 +23,12 @@ export default function CategoryCard({
       </Text>
 
       <View className="flex-row items-center bg-gray-100 rounded-lg px-4 py-3">
-        <HugeiconsIcon icon={UserIcon} size={20} color="#9CA3AF" style={{ marginRight: 12 }} />
+        <HugeiconsIcon
+          icon={UserIcon}
+          size={20}
+          color="#9CA3AF"
+          style={{ marginRight: 12 }}
+        />
         <TextInput
           placeholder="John Doe"
           value={name}
@@ -36,7 +41,12 @@ export default function CategoryCard({
       <View style={{ marginTop: 16 }}>
         <View style={styles.notesWrapper}>
           <View style={{ flexDirection: "row", alignItems: "flex-start" }}>
-            <HugeiconsIcon icon={Menu01Icon} size={18} color="#9CA3AF" style={{ marginRight: 12 }} />
+            <HugeiconsIcon
+              icon={Menu01Icon}
+              size={18}
+              color="#9CA3AF"
+              style={{ marginRight: 12 }}
+            />
             <View style={{ flex: 1 }}>
               <Text className="text-xs font-semibold text-gray-800 uppercase tracking-wider mb-2">
                 NOTES
@@ -48,7 +58,11 @@ export default function CategoryCard({
                 placeholderTextColor="#9CA3AF"
                 multiline
                 numberOfLines={4}
-                style={{ minHeight: 80, color: "#374151", textAlignVertical: "top" }}
+                style={{
+                  minHeight: 80,
+                  color: "#374151",
+                  textAlignVertical: "top",
+                }}
               />
             </View>
           </View>
