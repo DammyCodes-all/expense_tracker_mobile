@@ -6,7 +6,7 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import {
   Alert,
   Dimensions,
@@ -24,23 +24,19 @@ import CalendarPicker from "react-native-calendar-picker";
 import { Dropdown } from "react-native-element-dropdown";
 import BackHeader from "../components/BackHeader";
 import { useTransactions } from "../context/transactions-context";
-import {
-  CATEGORY_OPTIONS,
-  createLedgerTransaction,
-  TransactionCategoryValue,
-} from "../lib/transactions";
+import { LedgerTransaction } from "../lib/transactions";
+import { categoriesToOptions } from "../lib/categories";
 
 export default function AddTransaction() {
   const router = useRouter();
-  const { addTransaction } = useTransactions();
-  const [person, setPerson] = React.useState("");
-  const [date, setDate] = React.useState("");
-  const [allocation, setAllocation] = React.useState<string | null>(null);
-  const [allocationOpen, setAllocationOpen] = React.useState(false);
-  const [amount, setAmount] = React.useState("");
-  const [notes, setNotes] = React.useState("");
-  const [selectedDate, setSelectedDate] = React.useState<Date | null>(null);
-  const [isCalendarVisible, setIsCalendarVisible] = React.useState(false);
+  const { addTransaction, categories } = useTransactions();
+  const [person, setPerson] = useState("");
+  const [date, setDate] = useState("");
+  const [allocation, setAllocation] = useState<string | null>(null);
+  const [amount, setAmount] = useState("");
+  const [notes, setNotes] = useState("");
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [isCalendarVisible, setIsCalendarVisible] = useState(false);
 
   const formatDisplayDate = (value: Date) => {
     const month = String(value.getMonth() + 1).padStart(2, "0");
@@ -72,11 +68,12 @@ export default function AddTransaction() {
 
   const handleSave = () => {
     const amountValue = Number.parseFloat(amount);
-    const selectedCategory = CATEGORY_OPTIONS.find(
+    const opts = categoriesToOptions(categories || []);
+    const selectedCategoryId = opts.find(
       (category) => category.value === allocation,
     )?.value;
 
-    if (!person.trim() || !date.trim() || !selectedCategory) {
+    if (!person.trim() || !date.trim() || !selectedCategoryId) {
       Alert.alert("Missing Details", "Please fill person, date, and category.");
       return;
     }
@@ -86,13 +83,26 @@ export default function AddTransaction() {
       return;
     }
 
-    const transaction = createLedgerTransaction({
-      person,
-      date,
-      allocation: selectedCategory as TransactionCategoryValue,
+    const selectedCategoryObj = (categories || []).find(
+      (c) => c.id === selectedCategoryId,
+    );
+
+    const now = new Date();
+    const formatTime = (d: Date) =>
+      d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+    const transaction: LedgerTransaction = {
+      id: `tx_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+      icon: (selectedCategoryObj?.icon as any) || "note",
+      title: person.trim(),
+      category: selectedCategoryObj?.name || "Other",
+      time: formatTime(now),
       amount: amountValue,
-      notes,
-    });
+      date: date.trim(),
+      isIncome: false,
+      createdAt: now.toISOString(),
+      notes: notes?.trim() || undefined,
+    };
 
     addTransaction(transaction);
 
@@ -106,17 +116,21 @@ export default function AddTransaction() {
 
   return (
     <KeyboardAvoidingView
-      className="flex-1"
+      style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 88 : 20}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 88 : 88}
     >
-      <View className="flex-1 mx-4">
+      <View className="mx-4" style={{ flex: 1 }}>
         <BackHeader title="Add Transaction" />
 
         <ScrollView
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
-          contentContainerStyle={{ padding: 12, paddingBottom: 32 }}
+          contentContainerStyle={{
+            padding: 12,
+            paddingBottom: 32,
+            flexGrow: 1,
+          }}
           nestedScrollEnabled
         >
           <View className="space-y-6">
@@ -172,7 +186,7 @@ export default function AddTransaction() {
                   ADD CATEGORY
                 </Text>
                 <Dropdown
-                  data={CATEGORY_OPTIONS}
+                  data={categoriesToOptions(categories || [])}
                   labelField="label"
                   valueField="value"
                   value={allocation}
@@ -213,10 +227,7 @@ export default function AddTransaction() {
             </View>
 
             {/* Amount Card */}
-            <View
-              className="mt-4 bg-white rounded-3xl p-6 shadow-sm relative overflow-hidden z-10"
-              style={{ zIndex: -10 }}
-            >
+            <View className="mt-4 bg-white rounded-3xl p-6 shadow-sm relative overflow-hidden z-10">
               <View className="flex-row justify-between items-start mb-8">
                 <Text className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   AMOUNT
@@ -264,7 +275,6 @@ export default function AddTransaction() {
                   borderColor: "#93C5FD",
                   borderRadius: 12,
                   padding: 12,
-                  zIndex: -10,
                   backgroundColor: "#FFFFFF",
                 }}
               >
@@ -310,114 +320,114 @@ export default function AddTransaction() {
             </View>
           </View>
         </ScrollView>
-        <Modal
-          animationType="slide"
-          transparent
-          visible={isCalendarVisible}
-          onRequestClose={() => setIsCalendarVisible(false)}
+      </View>
+      <Modal
+        animationType="slide"
+        transparent
+        visible={isCalendarVisible}
+        onRequestClose={() => setIsCalendarVisible(false)}
+      >
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "rgba(0,0,0,0.5)",
+            justifyContent: "flex-end",
+          }}
         >
           <View
             style={{
-              flex: 1,
-              backgroundColor: "rgba(0,0,0,0.5)",
-              justifyContent: "flex-end",
+              backgroundColor: "#fff",
+              borderTopLeftRadius: 28,
+              borderTopRightRadius: 28,
+              paddingTop: 12,
+              paddingBottom: 32,
+              paddingHorizontal: 8,
             }}
           >
+            {/* drag handle */}
             <View
               style={{
-                backgroundColor: "#fff",
-                borderTopLeftRadius: 28,
-                borderTopRightRadius: 28,
-                paddingTop: 12,
-                paddingBottom: 32,
-                paddingHorizontal: 8,
+                width: 40,
+                height: 4,
+                borderRadius: 2,
+                backgroundColor: "#E5E7EB",
+                alignSelf: "center",
+                marginBottom: 16,
+              }}
+            />
+
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                paddingHorizontal: 16,
+                marginBottom: 12,
               }}
             >
-              {/* drag handle */}
-              <View
+              <Text
                 style={{
-                  width: 40,
-                  height: 4,
-                  borderRadius: 2,
-                  backgroundColor: "#E5E7EB",
-                  alignSelf: "center",
-                  marginBottom: 16,
-                }}
-              />
-
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  paddingHorizontal: 16,
-                  marginBottom: 12,
+                  fontSize: 16,
+                  fontFamily: "Manrope_700Bold",
+                  color: "#111827",
                 }}
               >
+                Pick a Date
+              </Text>
+              <TouchableOpacity onPress={() => setIsCalendarVisible(false)}>
                 <Text
                   style={{
-                    fontSize: 16,
-                    fontFamily: "Manrope_700Bold",
-                    color: "#111827",
+                    color: "#2563EB",
+                    fontFamily: "Manrope_600SemiBold",
+                    fontSize: 14,
                   }}
                 >
-                  Pick a Date
+                  Done
                 </Text>
-                <TouchableOpacity onPress={() => setIsCalendarVisible(false)}>
-                  <Text
-                    style={{
-                      color: "#2563EB",
-                      fontFamily: "Manrope_600SemiBold",
-                      fontSize: 14,
-                    }}
-                  >
-                    Done
-                  </Text>
-                </TouchableOpacity>
-              </View>
-
-              <CalendarPicker
-                selectedStartDate={selectedDate || undefined}
-                onDateChange={(value: any) => handleDateSelect(new Date(value))}
-                startFromMonday
-                width={Dimensions.get("window").width - 16}
-                todayBackgroundColor="#EFF6FF"
-                todayTextStyle={{
-                  color: "#2563EB",
-                  fontFamily: "Manrope_700Bold",
-                }}
-                selectedDayColor="#2563EB"
-                selectedDayTextColor="#FFFFFF"
-                dayLabelsWrapper={{ borderTopWidth: 0, borderBottomWidth: 0 }}
-                textStyle={{
-                  color: "#374151",
-                  fontFamily: "Manrope_400Regular",
-                  fontSize: 14,
-                }}
-                monthTitleStyle={{
-                  color: "#111827",
-                  fontFamily: "Manrope_700Bold",
-                  fontSize: 16,
-                }}
-                yearTitleStyle={{
-                  color: "#111827",
-                  fontFamily: "Manrope_700Bold",
-                  fontSize: 16,
-                }}
-                previousTitleStyle={{
-                  color: "#2563EB",
-                  fontFamily: "Manrope_600SemiBold",
-                }}
-                nextTitleStyle={{
-                  color: "#2563EB",
-                  fontFamily: "Manrope_600SemiBold",
-                }}
-                dayShape="circle"
-              />
+              </TouchableOpacity>
             </View>
+
+            <CalendarPicker
+              selectedStartDate={selectedDate || undefined}
+              onDateChange={(value: any) => handleDateSelect(new Date(value))}
+              startFromMonday
+              width={Dimensions.get("window").width - 16}
+              todayBackgroundColor="#EFF6FF"
+              todayTextStyle={{
+                color: "#2563EB",
+                fontFamily: "Manrope_700Bold",
+              }}
+              selectedDayColor="#2563EB"
+              selectedDayTextColor="#FFFFFF"
+              dayLabelsWrapper={{ borderTopWidth: 0, borderBottomWidth: 0 }}
+              textStyle={{
+                color: "#374151",
+                fontFamily: "Manrope_400Regular",
+                fontSize: 14,
+              }}
+              monthTitleStyle={{
+                color: "#111827",
+                fontFamily: "Manrope_700Bold",
+                fontSize: 16,
+              }}
+              yearTitleStyle={{
+                color: "#111827",
+                fontFamily: "Manrope_700Bold",
+                fontSize: 16,
+              }}
+              previousTitleStyle={{
+                color: "#2563EB",
+                fontFamily: "Manrope_600SemiBold",
+              }}
+              nextTitleStyle={{
+                color: "#2563EB",
+                fontFamily: "Manrope_600SemiBold",
+              }}
+              dayShape="circle"
+            />
           </View>
-        </Modal>
-      </View>
+        </View>
+      </Modal>
     </KeyboardAvoidingView>
   );
 }

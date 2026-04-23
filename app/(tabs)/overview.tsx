@@ -16,42 +16,9 @@ import TransactionCard from "../../components/TransactionCard";
 import WealthCard from "../../components/WealthCard";
 import { useTransactions } from "../../context/transactions-context";
 
-const CATEGORIES = [
-  {
-    title: "Transport",
-    amount: 320,
-    budget: 700,
-    icon: "car",
-  },
-  {
-    title: "Dining Out",
-    amount: 485,
-    budget: 500,
-    icon: "cutlery",
-  },
-  {
-    title: "Groceries",
-    amount: 250,
-    budget: 400,
-    icon: "bag",
-  },
-  {
-    title: "Utilities",
-    amount: 150,
-    budget: 200,
-    icon: "money",
-  },
-  {
-    title: "Entertainment",
-    amount: 200,
-    budget: 300,
-    icon: "car",
-  },
-];
-
 export default function Overview() {
   const router = useRouter();
-  const { transactions, isHydrated } = useTransactions();
+  const { transactions, isHydrated, categories } = useTransactions();
 
   return (
     <View className="flex-1 relative">
@@ -70,12 +37,12 @@ export default function Overview() {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ paddingHorizontal: 16, gap: 12 }}
           >
-            {CATEGORIES.map((category, index) => (
+            {(categories || []).map((category) => (
               <CategoryCard
-                key={index}
-                title={category.title}
-                amount={category.amount}
-                budget={category.budget}
+                key={category.id}
+                title={category.name}
+                amount={0}
+                budget={category.budget || 0}
                 icon={category.icon}
               />
             ))}

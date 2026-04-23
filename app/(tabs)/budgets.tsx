@@ -7,17 +7,12 @@ import { HugeiconsIcon } from "@hugeicons/react-native";
 import { useRouter } from "expo-router";
 import React from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
+import { useTransactions } from "@/context/transactions-context";
 
 export default function Budgets() {
   const router = useRouter();
 
-  const CATEGORIES = [
-    { title: "Food", amount: 320, budget: 500, icon: "cutlery" },
-    { title: "Travel", amount: 120, budget: 400, icon: "car" },
-    { title: "Salary", amount: 0, budget: 0, icon: "money" },
-    { title: "Shop", amount: 180, budget: 300, icon: "bag" },
-    { title: "Home", amount: 90, budget: 200, icon: "money" },
-  ];
+  const { categories } = useTransactions();
 
   return (
     <View className="flex-1 relative">
@@ -36,8 +31,8 @@ export default function Budgets() {
               className="-mx-3"
               contentContainerStyle={{ paddingHorizontal: 8, gap: 12 }}
             >
-              {CATEGORIES.map((c, idx) => (
-                <CategoryChip key={idx} title={c.title} icon={c.icon} />
+              {(categories || []).map((c) => (
+                <CategoryChip key={c.id} title={c.name} icon={c.icon} />
               ))}
 
               <Pressable
