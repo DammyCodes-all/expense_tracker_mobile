@@ -111,3 +111,50 @@ export const createLedgerTransaction = (
     notes: input.notes?.trim() || undefined,
   };
 };
+
+export const SEED_TRANSACTIONS: LedgerTransaction[] = [
+  {
+    id: "seed_apple_store",
+    icon: "bag",
+    title: "Apple Store",
+    category: "Technology",
+    time: "2:45 PM",
+    amount: 1299.0,
+    date: "OCT 12",
+    isIncome: false,
+    createdAt: "2025-10-12T14:45:00.000Z",
+  },
+  {
+    id: "seed_dividend",
+    icon: "money",
+    title: "Dividend Payout",
+    category: "Investment",
+    time: "11:20 AM",
+    amount: 450.25,
+    date: "OCT 11",
+    isIncome: true,
+    createdAt: "2025-10-11T11:20:00.000Z",
+  },
+  {
+    id: "seed_dining",
+    icon: "cutlery",
+    title: "The Gilded Fork",
+    category: "Dining",
+    time: "8:15 PM",
+    amount: 240.5,
+    date: "OCT 10",
+    isIncome: false,
+    createdAt: "2025-10-10T20:15:00.000Z",
+  },
+  {
+    id: "seed_spotify",
+    icon: "money",
+    title: "Spotify Premium",
+    category: "Entertainment",
+    time: "10:30 AM",
+    amount: 9.99,
+    date: "OCT 9",
+    isIncome: false,
+    createdAt: "2025-10-09T10:30:00.000Z",
+  },
+];

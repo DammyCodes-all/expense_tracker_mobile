@@ -6,7 +6,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { LedgerTransaction } from "../lib/transactions";
+import { LedgerTransaction, SEED_TRANSACTIONS } from "../lib/transactions";
 
 const TRANSACTIONS_STORAGE_KEY = "expense_tracker_transactions_v1";
 
@@ -28,16 +28,22 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
     const hydrate = async () => {
       try {
         const stored = await AsyncStorage.getItem(TRANSACTIONS_STORAGE_KEY);
-        if (!stored) {
-          return;
-        }
-
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed)) {
-          setTransactions(parsed);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed)) {
+            setTransactions(parsed);
+          }
+        } else {
+          // Initialize with seed data on first app load
+          setTransactions(SEED_TRANSACTIONS);
+          await AsyncStorage.setItem(
+            TRANSACTIONS_STORAGE_KEY,
+            JSON.stringify(SEED_TRANSACTIONS),
+          );
         }
       } catch (error) {
         console.warn("Failed to load transactions from storage", error);
+        setTransactions(SEED_TRANSACTIONS);
       } finally {
         setIsHydrated(true);
       }

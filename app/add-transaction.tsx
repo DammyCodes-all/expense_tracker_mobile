@@ -9,7 +9,9 @@ import { useRouter } from "expo-router";
 import React from "react";
 import {
   Alert,
+  Dimensions,
   KeyboardAvoidingView,
+  Modal,
   Platform,
   ScrollView,
   StyleSheet,
@@ -18,6 +20,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import CalendarPicker from "react-native-calendar-picker";
 import { Dropdown } from "react-native-element-dropdown";
 import BackHeader from "../components/BackHeader";
 import { useTransactions } from "../context/transactions-context";
@@ -36,6 +39,22 @@ export default function AddTransaction() {
   const [allocationOpen, setAllocationOpen] = React.useState(false);
   const [amount, setAmount] = React.useState("");
   const [notes, setNotes] = React.useState("");
+  const [selectedDate, setSelectedDate] = React.useState<Date | null>(null);
+  const [isCalendarVisible, setIsCalendarVisible] = React.useState(false);
+
+  const formatDisplayDate = (value: Date) => {
+    const month = String(value.getMonth() + 1).padStart(2, "0");
+    const day = String(value.getDate()).padStart(2, "0");
+    const year = value.getFullYear();
+
+    return `${month}/${day}/${year}`;
+  };
+
+  const handleDateSelect = (value: Date) => {
+    setSelectedDate(value);
+    setDate(formatDisplayDate(value));
+    setIsCalendarVisible(false);
+  };
 
   const handleAmountChange = (rawValue: string) => {
     const normalized = rawValue.replace(/,/g, ".");
@@ -107,7 +126,7 @@ export default function AddTransaction() {
                 <Text className="text-xs font-semibold text-gray-800 uppercase tracking-wider">
                   ADD TRANSACTION
                 </Text>
-                <View className="flex-row items-center bg-gray-100 rounded-lg px-4 py-3">
+                <View className="flex-row items-center bg-gray-100 rounded-lg px-4 py-3 gap-3">
                   <HugeiconsIcon
                     icon={UserIcon}
                     size={20}
@@ -129,21 +148,22 @@ export default function AddTransaction() {
                 <Text className="text-xs font-semibold text-gray-800 uppercase tracking-wider">
                   ADD TRANSACTION
                 </Text>
-                <View className="flex-row items-center bg-gray-100 rounded-lg px-4 py-3">
+                <TouchableOpacity
+                  onPress={() => setIsCalendarVisible(true)}
+                  className="flex-row items-center bg-gray-100 rounded-lg px-4 py-3 gap-3"
+                >
                   <HugeiconsIcon
                     icon={Calendar03Icon}
                     size={20}
                     color="#9CA3AF"
                     style={{ marginRight: 12 }}
                   />
-                  <TextInput
-                    placeholder="11/24/2023"
-                    value={date}
-                    onChangeText={setDate}
-                    placeholderTextColor="#D1D5DB"
-                    className="flex-1 text-base text-gray-800"
-                  />
-                </View>
+                  <Text
+                    className={`flex-1 text-base ${date ? "text-gray-800" : "text-gray-300"}`}
+                  >
+                    {date || "Select Date"}
+                  </Text>
+                </TouchableOpacity>
               </View>
 
               {/* Category Dropdown */}
@@ -161,16 +181,13 @@ export default function AddTransaction() {
                   maxHeight={220}
                   style={{
                     backgroundColor: "#F3F4F6",
-                    borderColor: "#BFDBFE",
-                    borderWidth: 1.5,
                     borderRadius: 12,
                     paddingHorizontal: 16,
                     paddingVertical: 12,
                   }}
                   containerStyle={{
                     backgroundColor: "#F9FAFB",
-                    borderColor: "#E5E7EB",
-                    borderWidth: 1,
+
                     borderRadius: 16,
                     marginTop: 6,
                     overflow: "hidden",
@@ -251,7 +268,7 @@ export default function AddTransaction() {
                   backgroundColor: "#FFFFFF",
                 }}
               >
-                <View className="flex-row items-start gap-1">
+                <View className="flex-row items-start gap-2">
                   <HugeiconsIcon
                     icon={Menu01Icon}
                     size={18}
@@ -293,6 +310,113 @@ export default function AddTransaction() {
             </View>
           </View>
         </ScrollView>
+        <Modal
+          animationType="slide"
+          transparent
+          visible={isCalendarVisible}
+          onRequestClose={() => setIsCalendarVisible(false)}
+        >
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "rgba(0,0,0,0.5)",
+              justifyContent: "flex-end",
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: "#fff",
+                borderTopLeftRadius: 28,
+                borderTopRightRadius: 28,
+                paddingTop: 12,
+                paddingBottom: 32,
+                paddingHorizontal: 8,
+              }}
+            >
+              {/* drag handle */}
+              <View
+                style={{
+                  width: 40,
+                  height: 4,
+                  borderRadius: 2,
+                  backgroundColor: "#E5E7EB",
+                  alignSelf: "center",
+                  marginBottom: 16,
+                }}
+              />
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  paddingHorizontal: 16,
+                  marginBottom: 12,
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontFamily: "Manrope_700Bold",
+                    color: "#111827",
+                  }}
+                >
+                  Pick a Date
+                </Text>
+                <TouchableOpacity onPress={() => setIsCalendarVisible(false)}>
+                  <Text
+                    style={{
+                      color: "#2563EB",
+                      fontFamily: "Manrope_600SemiBold",
+                      fontSize: 14,
+                    }}
+                  >
+                    Done
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <CalendarPicker
+                selectedStartDate={selectedDate || undefined}
+                onDateChange={(value: any) => handleDateSelect(new Date(value))}
+                startFromMonday
+                width={Dimensions.get("window").width - 16}
+                todayBackgroundColor="#EFF6FF"
+                todayTextStyle={{
+                  color: "#2563EB",
+                  fontFamily: "Manrope_700Bold",
+                }}
+                selectedDayColor="#2563EB"
+                selectedDayTextColor="#FFFFFF"
+                dayLabelsWrapper={{ borderTopWidth: 0, borderBottomWidth: 0 }}
+                textStyle={{
+                  color: "#374151",
+                  fontFamily: "Manrope_400Regular",
+                  fontSize: 14,
+                }}
+                monthTitleStyle={{
+                  color: "#111827",
+                  fontFamily: "Manrope_700Bold",
+                  fontSize: 16,
+                }}
+                yearTitleStyle={{
+                  color: "#111827",
+                  fontFamily: "Manrope_700Bold",
+                  fontSize: 16,
+                }}
+                previousTitleStyle={{
+                  color: "#2563EB",
+                  fontFamily: "Manrope_600SemiBold",
+                }}
+                nextTitleStyle={{
+                  color: "#2563EB",
+                  fontFamily: "Manrope_600SemiBold",
+                }}
+                dayShape="circle"
+              />
+            </View>
+          </View>
+        </Modal>
       </View>
     </KeyboardAvoidingView>
   );
