@@ -38,7 +38,12 @@ export default function WealthCard({
         </View>
       </View>
 
-      <Text className="text-4xl font-bold text-white mb-2">{amount}</Text>
+      <Text
+        className="text-4xl text-white mb-2"
+        style={{ fontFamily: "Manrope_700Bold" }}
+      >
+        {amount}
+      </Text>
 
       <Text className="text-blue-200 text-sm italic mb-6">
         Market valuation as of today
@@ -49,7 +54,10 @@ export default function WealthCard({
           onPress={onDeposit}
           className="flex-1 rounded-2xl bg-white/10 py-4"
         >
-          <Text className="text-center font-bold text-white text-lg">
+          <Text
+            className="text-center text-white text-lg"
+            style={{ fontFamily: "Manrope_700Bold" }}
+          >
             DEPOSIT
           </Text>
         </Pressable>
@@ -58,7 +66,10 @@ export default function WealthCard({
           onPress={onWithdraw}
           className="flex-1 rounded-2xl bg-white/10 py-4"
         >
-          <Text className="text-center font-bold text-white text-lg">
+          <Text
+            className="text-center text-white text-lg"
+            style={{ fontFamily: "Manrope_700Bold" }}
+          >
             WITHDRAW
           </Text>
         </Pressable>

@@ -15,7 +15,10 @@ export default function Header() {
             className="w-12 h-12 rounded-full"
           />
 
-          <Text className="text-lg font-bold text-blue-700">
+          <Text
+            className="text-lg  text-blue-700 font-sans"
+            style={{ fontFamily: "Manrope_700Bold" }}
+          >
             Sovereign Ledger
           </Text>
         </View>

@@ -24,7 +24,12 @@ export default function BackHeader({ title }: BackHeaderProps) {
           strokeWidth={2.3}
         />
       </TouchableOpacity>
-      <Text className="text-lg font-bold ml-4 text-blue-600">{title}</Text>
+      <Text
+        className="text-lg ml-4 text-blue-600"
+        style={{ fontFamily: "Manrope_700Bold" }}
+      >
+        {title}
+      </Text>
     </View>
   );
 }

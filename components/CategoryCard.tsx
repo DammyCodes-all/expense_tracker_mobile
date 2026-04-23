@@ -61,7 +61,12 @@ export default function CategoryCard({
 
       <Text className="text-sm font-semibold text-slate-700 mb-1">{title}</Text>
 
-      <Text className="text-xl font-bold text-blue-700 mb-2">${amount}</Text>
+      <Text
+        className="text-xl text-blue-700 mb-2"
+        style={{ fontFamily: "Manrope_700Bold" }}
+      >
+        ${amount}
+      </Text>
 
       <View className="bg-slate-200 rounded-full h-2 mb-1.5 overflow-hidden">
         <View
@@ -74,9 +79,10 @@ export default function CategoryCard({
       </View>
 
       <Text
-        className={`text-xs font-bold ${
+        className={`text-xs ${
           isOverBudget ? "text-red-600" : "text-slate-600"
         }`}
+        style={{ fontFamily: "Manrope_700Bold" }}
       >
         ${isOverBudget ? `${amount - budget} OVER` : `${amountLeft} LEFT`}
       </Text>

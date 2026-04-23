@@ -1,16 +1,16 @@
-import { Slot } from "expo-router";
-import { useColorScheme, View, Text as RNText } from "react-native";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import "./global.css";
-import * as SplashScreen from "expo-splash-screen";
 import {
-  useFonts,
   Manrope_400Regular,
   Manrope_500Medium,
   Manrope_600SemiBold,
   Manrope_700Bold,
+  useFonts,
 } from "@expo-google-fonts/manrope";
+import { Slot } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import { Text as RNText, useColorScheme, View } from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import "./global.css";
 
 export const unstable_settings = {
   anchor: "(tabs)",
@@ -25,6 +25,8 @@ export default function RootLayout() {
     Manrope_600SemiBold,
     Manrope_700Bold,
   });
+
+  const scheme = useColorScheme();
 
   useEffect(() => {
     if (fontsLoaded) {
@@ -54,8 +56,6 @@ export default function RootLayout() {
   if (!fontsLoaded) {
     return null;
   }
-
-  const scheme = useColorScheme();
   const backgroundColor = scheme === "dark" ? "#1a1a1a" : "#ffffff";
 
   return (

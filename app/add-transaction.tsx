@@ -34,7 +34,12 @@ export default function AddTransaction() {
     <View className="flex-1">
       <BackHeader title="Add Transaction" />
       <ScrollView className="flex-1" contentContainerStyle={{ padding: 16 }}>
-        <Text className="text-2xl font-bold mb-6">Add Transaction</Text>
+        <Text
+          className="text-2xl mb-6"
+          style={{ fontFamily: "Manrope_700Bold" }}
+        >
+          Add Transaction
+        </Text>
 
         {/* Amount Input */}
         <View className="mb-6">
