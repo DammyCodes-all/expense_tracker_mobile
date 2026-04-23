@@ -52,7 +52,10 @@ export default function Budgets() {
               </Pressable>
             </ScrollView>
           </View>
-          <Pressable className="flex flex-row bg-blue-700 font-sans rounded-2xl items-center justify-center gap-3 py-3 ">
+          <Pressable
+            className="flex flex-row bg-blue-700 font-sans rounded-2xl items-center justify-center gap-3 py-3 "
+            onPress={() => router.push("/add-budget")}
+          >
             <HugeiconsIcon icon={PlusSignIcon} size={18} color="#fff" />
             <Text className="text-sm text-white font-semibold ml-2">
               Add New Category

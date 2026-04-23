@@ -23,6 +23,7 @@ import {
 import CalendarPicker from "react-native-calendar-picker";
 import { Dropdown } from "react-native-element-dropdown";
 import BackHeader from "../components/BackHeader";
+import UsdAmountInput from "../components/form/UsdAmountInput";
 import { useTransactions } from "../context/transactions-context";
 import { LedgerTransaction } from "../lib/transactions";
 import { categoriesToOptions } from "../lib/categories";
@@ -226,46 +227,7 @@ export default function AddTransaction() {
               </View>
             </View>
 
-            {/* Amount Card */}
-            <View className="mt-4 bg-white rounded-3xl p-6 shadow-sm relative overflow-hidden z-10">
-              <View className="flex-row justify-between items-start mb-8">
-                <Text className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  AMOUNT
-                </Text>
-
-                <View
-                  className="bg-blue-700 px-6 py-3 absolute -right-6 -top-7"
-                  style={styles.usdBadge}
-                >
-                  <Text
-                    className="text-white text-xs"
-                    style={{ fontFamily: "Manrope_700Bold" }}
-                  >
-                    USD
-                  </Text>
-                </View>
-              </View>
-
-              <View className="flex-row items-center">
-                <View style={styles.dollarContainer}>
-                  <Text
-                    className="text-gray-400 mr-1"
-                    style={styles.dollarSign}
-                  >
-                    $
-                  </Text>
-                </View>
-
-                <TextInput
-                  placeholder="0.00"
-                  value={amount}
-                  onChangeText={handleAmountChange}
-                  keyboardType="decimal-pad"
-                  multiline={false}
-                  style={styles.amountInput}
-                />
-              </View>
-            </View>
+            <UsdAmountInput value={amount} onChangeText={handleAmountChange} />
 
             {/* Notes Field */}
             <View className="mt-4">

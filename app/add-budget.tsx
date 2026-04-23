@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import { View } from "react-native";
 import BackHeader from "@/components/BackHeader";
 import { useRouter } from "expo-router";
-import LabelledInput from "@/components/form/LabelledInput";
-import NotesField from "@/components/form/NotesField";
-import CurrencyCard from "@/components/form/CurrencyCard";
+import UsdAmountInput from "@/components/form/UsdAmountInput";
+import CategoryCard from "@/components/form/CategoryCard";
 import SaveButton from "@/components/form/SaveButton";
 import { useTransactions } from "@/context/transactions-context";
 
@@ -17,31 +16,17 @@ export default function AddBudget() {
   const [notes, setNotes] = useState("");
 
   return (
-    <View className="flex-1 bg-white">
+    <View className="flex-1 ">
       <BackHeader title="Add Budget" />
 
-      <View className="px-4 py-6">
-        <LabelledInput
-          label="Category"
-          placeholder="e.g., Groceries"
-          value={name}
-          onChangeText={setName}
-        />
+      <View className="px-4 py-6 flex gap-3">
+        <CategoryCard name={name} onNameChange={setName} notes={notes} onNotesChange={setNotes} />
 
-        <CurrencyCard
-          value={budget ? `$${budget}` : undefined}
-          onPress={() => {}}
-        />
-
-        <LabelledInput
-          label="Budget Limit"
-          placeholder="$0.00"
+        <UsdAmountInput
           value={budget}
+          title="Category budget"
           onChangeText={setBudget}
-          keyboardType="numeric"
         />
-
-        <NotesField value={notes} onChangeText={setNotes} />
 
         <SaveButton
           label="Save Budget"
