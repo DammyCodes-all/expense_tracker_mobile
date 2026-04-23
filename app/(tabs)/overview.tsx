@@ -3,6 +3,7 @@ import { ScrollView, Text, View } from "react-native";
 import Header from "../../components/Header";
 import WealthCard from "../../components/WealthCard";
 import CategoryCard from "../../components/CategoryCard";
+import SpendingTrendChart from "../../components/SpendingTrendChart";
 import {
   CarIcon,
   CuttleryIcon,
@@ -47,7 +48,7 @@ export default function Overview() {
   return (
     <View className="flex-1">
       <Header />
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} className="">
         <View className="mx-4 space-y-6">
           <WealthCard />
           {/* Allocations */}
@@ -71,6 +72,13 @@ export default function Overview() {
               />
             ))}
           </ScrollView>
+          {/* Spending Trend Chart */}
+          <SpendingTrendChart />
+
+          <View className="w-full flex mt-4 px-4 flex-row justify-between items-center font-semibold">
+            <Text className="text-lg">Recent Ledger</Text>
+            <Text className="font-semibold text-blue-600">View All</Text>
+          </View>
         </View>
       </ScrollView>
     </View>
