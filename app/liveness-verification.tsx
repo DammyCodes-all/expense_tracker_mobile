@@ -26,7 +26,6 @@ export default function LivenessVerification() {
   const hasPermission = status?.granted ?? false;
   const stableFramesRef = useRef(0);
   const firstTurnSignRef = useRef<"negative" | "positive" | null>(null);
-  const lastLogTimestampRef = useRef(0);
   const completionHandledRef = useRef(false);
 
   const YAW_THRESHOLD = 18;
@@ -59,7 +58,7 @@ export default function LivenessVerification() {
           onPress: () => router.replace("/(tabs)/overview"),
         },
       ],
-      { cancelable: false }
+      { cancelable: false },
     );
   }
 
@@ -76,10 +75,9 @@ export default function LivenessVerification() {
     const rawRoll = faces[0]?.rollAngle ?? 0;
     const yaw = normalizeAngle(rawYaw);
     const roll = normalizeAngle(rawRoll);
-    const now = Date.now();
 
     setDebugText(
-      `faces:${faces.length} yaw:${yaw.toFixed(1)} roll:${roll.toFixed(1)} step:${challenge} stable:${stableFramesRef.current}`
+      `faces:${faces.length} yaw:${yaw.toFixed(1)} roll:${roll.toFixed(1)} step:${challenge} stable:${stableFramesRef.current}`,
     );
 
     let turnedToOppositeSide = false;
@@ -119,21 +117,6 @@ export default function LivenessVerification() {
         handleVerificationComplete();
         return;
       }
-    }
-
-    if (now - lastLogTimestampRef.current > 450) {
-      console.log("[liveness]", {
-        challenge,
-        faces: faces.length,
-        yaw,
-        rawYaw,
-        roll,
-        rawRoll,
-        stableFrames: stableFramesRef.current,
-        firstTurnSign: firstTurnSignRef.current,
-        turnedToOppositeSide,
-      });
-      lastLogTimestampRef.current = now;
     }
   }
 
