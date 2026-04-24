@@ -15,6 +15,7 @@ import {
   FaceDetectorMode,
   useCameraPermissions,
 } from "react-native-face-detector-camera";
+import * as Speech from "expo-speech";
 
 export default function LivenessVerification() {
   const router = useRouter();
@@ -27,6 +28,24 @@ export default function LivenessVerification() {
   const stableFramesRef = useRef(0);
   const firstTurnSignRef = useRef<"negative" | "positive" | null>(null);
   const completionHandledRef = useRef(false);
+
+  useEffect(() => {
+    if (!hasPermission) return;
+
+    Speech.stop();
+
+    Speech.speak(instruction, {
+      language: "en-US",
+      pitch: 1.0,
+      rate: 0.92,
+    });
+  }, [instruction, hasPermission]);
+
+  useEffect(() => {
+    return () => {
+      Speech.stop();
+    };
+  }, []);
 
   const YAW_THRESHOLD = 18;
   const REQUIRED_STABLE_FRAMES = 3;
@@ -49,17 +68,19 @@ export default function LivenessVerification() {
     setInstruction("Verification complete!");
     setDebugText("Liveness done. Redirecting to overview...");
 
-    Alert.alert(
-      "Verification complete",
-      "Liveness check passed successfully.",
-      [
-        {
-          text: "Continue",
-          onPress: () => router.replace("/(tabs)/overview"),
-        },
-      ],
-      { cancelable: false },
-    );
+    setTimeout(() => {
+      Alert.alert(
+        "Verification complete",
+        "Liveness check passed successfully.",
+        [
+          {
+            text: "Continue",
+            onPress: () => router.replace("/(tabs)/overview"),
+          },
+        ],
+        { cancelable: false },
+      );
+    }, 1200);
   }
 
   function processFaceDetection({ faces }: FaceDetectionResult) {
