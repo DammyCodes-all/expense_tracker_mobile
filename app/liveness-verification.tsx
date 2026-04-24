@@ -4,23 +4,144 @@ import {
   Shield01Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react-native";
-import React, { useEffect } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useRouter } from "expo-router";
+import React, { useEffect, useRef, useState } from "react";
+import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import {
-  Camera,
-  useCameraDevice,
-  useCameraPermission,
-} from "react-native-vision-camera";
+  CameraView,
+  FaceDetectionResult,
+  FaceDetectorClassifications,
+  FaceDetectorLandmarks,
+  FaceDetectorMode,
+  useCameraPermissions,
+} from "react-native-face-detector-camera";
 
 export default function LivenessVerification() {
-  const { hasPermission, requestPermission } = useCameraPermission();
-  const device = useCameraDevice("front");
+  const router = useRouter();
+  const [status, requestPermission] = useCameraPermissions();
+  const [challenge, setChallenge] = useState<"left" | "right" | "done">("left");
+  const [instruction, setInstruction] = useState("Turn your head LEFT");
+  const [debugText, setDebugText] = useState("Waiting for face...");
+
+  const hasPermission = status?.granted ?? false;
+  const stableFramesRef = useRef(0);
+  const firstTurnSignRef = useRef<"negative" | "positive" | null>(null);
+  const lastLogTimestampRef = useRef(0);
+  const completionHandledRef = useRef(false);
+
+  const YAW_THRESHOLD = 18;
+  const REQUIRED_STABLE_FRAMES = 3;
+
+  function normalizeAngle(angle: number) {
+    if (angle > 180) {
+      return angle - 360;
+    }
+
+    return angle;
+  }
+
+  function handleVerificationComplete() {
+    if (completionHandledRef.current) {
+      return;
+    }
+
+    completionHandledRef.current = true;
+    setChallenge("done");
+    setInstruction("Verification complete!");
+    setDebugText("Liveness done. Redirecting to overview...");
+
+    Alert.alert(
+      "Verification complete",
+      "Liveness check passed successfully.",
+      [
+        {
+          text: "Continue",
+          onPress: () => router.replace("/(tabs)/overview"),
+        },
+      ],
+      { cancelable: false }
+    );
+  }
+
+  function processFaceDetection({ faces }: FaceDetectionResult) {
+    if (!hasPermission || faces.length === 0 || challenge === "done") {
+      stableFramesRef.current = 0;
+      if (faces.length === 0) {
+        setDebugText("No face detected");
+      }
+      return;
+    }
+
+    const rawYaw = faces[0]?.yawAngle ?? 0;
+    const rawRoll = faces[0]?.rollAngle ?? 0;
+    const yaw = normalizeAngle(rawYaw);
+    const roll = normalizeAngle(rawRoll);
+    const now = Date.now();
+
+    setDebugText(
+      `faces:${faces.length} yaw:${yaw.toFixed(1)} roll:${roll.toFixed(1)} step:${challenge} stable:${stableFramesRef.current}`
+    );
+
+    let turnedToOppositeSide = false;
+
+    if (challenge === "left") {
+      if (Math.abs(yaw) >= YAW_THRESHOLD) {
+        stableFramesRef.current += 1;
+      } else {
+        stableFramesRef.current = 0;
+      }
+
+      if (stableFramesRef.current >= REQUIRED_STABLE_FRAMES) {
+        firstTurnSignRef.current = yaw < 0 ? "negative" : "positive";
+        stableFramesRef.current = 0;
+        setChallenge("right");
+        setInstruction("Great. Now turn your head to the opposite side");
+      }
+
+      return;
+    }
+
+    if (challenge === "right") {
+      const firstTurnSign = firstTurnSignRef.current;
+      turnedToOppositeSide =
+        firstTurnSign === "negative"
+          ? yaw >= YAW_THRESHOLD
+          : yaw <= -YAW_THRESHOLD;
+
+      if (turnedToOppositeSide) {
+        stableFramesRef.current += 1;
+      } else {
+        stableFramesRef.current = 0;
+      }
+
+      if (stableFramesRef.current >= REQUIRED_STABLE_FRAMES) {
+        stableFramesRef.current = 0;
+        handleVerificationComplete();
+        return;
+      }
+    }
+
+    if (now - lastLogTimestampRef.current > 450) {
+      console.log("[liveness]", {
+        challenge,
+        faces: faces.length,
+        yaw,
+        rawYaw,
+        roll,
+        rawRoll,
+        stableFrames: stableFramesRef.current,
+        firstTurnSign: firstTurnSignRef.current,
+        turnedToOppositeSide,
+      });
+      lastLogTimestampRef.current = now;
+    }
+  }
 
   useEffect(() => {
-    if (!hasPermission) {
+    if (status && !status.granted) {
       requestPermission();
     }
-  }, [hasPermission, requestPermission]);
+  }, [status, requestPermission]);
 
   return (
     <View className="flex-1 bg-[#EFF4FB]">
@@ -47,19 +168,28 @@ export default function LivenessVerification() {
               className="text-[14px] text-[#0C2A57]"
               style={{ fontFamily: "Manrope_600SemiBold" }}
             >
-              {!hasPermission
-                ? "Requesting camera permission..."
-                : "Center your face in the frame"}
+              {!status
+                ? "Checking camera permission..."
+                : !hasPermission
+                  ? "Requesting camera permission..."
+                  : instruction}
             </Text>
           </View>
 
           <View className="mt-6 items-center justify-center">
             <View className="h-[250px] w-[250px] overflow-hidden rounded-full border-[6px] border-[#0E4EDB] bg-[#D7E6FF] shadow-[0_16px_40px_rgba(14,78,219,0.20)]">
-              {device ? (
-                <Camera
+              {hasPermission ? (
+                <CameraView
                   style={StyleSheet.absoluteFill}
-                  device={device}
-                  isActive={hasPermission}
+                  facing="front"
+                  onFacesDetected={processFaceDetection}
+                  faceDetectorSettings={{
+                    mode: FaceDetectorMode.fast,
+                    detectLandmarks: FaceDetectorLandmarks.none,
+                    runClassifications: FaceDetectorClassifications.none,
+                    minDetectionInterval: 100,
+                    tracking: true,
+                  }}
                 />
               ) : (
                 <View className="flex-1 items-center justify-center bg-[#CFE0FF]">
@@ -74,11 +204,20 @@ export default function LivenessVerification() {
                   className="text-center text-[12px] text-white"
                   style={{ fontFamily: "Manrope_600SemiBold" }}
                 >
-                  {hasPermission
-                    ? "Align your face inside the circle"
-                    : "Camera access required"}
+                  {hasPermission ? instruction : "Camera access required"}
                 </Text>
               </View>
+
+              {hasPermission ? (
+                <View className="absolute inset-x-4 bottom-5 rounded-xl bg-black/55 px-3 py-2">
+                  <Text
+                    className="text-center text-[11px] text-white"
+                    style={{ fontFamily: "Manrope_600SemiBold" }}
+                  >
+                    {debugText}
+                  </Text>
+                </View>
+              ) : null}
             </View>
           </View>
 
@@ -95,8 +234,9 @@ export default function LivenessVerification() {
           </View>
 
           <Pressable
-            disabled={!hasPermission}
+            disabled={!hasPermission || challenge !== "done"}
             className="mt-8 w-full rounded-xl bg-[#D7DEE8] px-6 py-4 opacity-90"
+            onPress={() => router.replace("/(tabs)/overview")}
           >
             <View className="flex-row items-center justify-center gap-2">
               <Text

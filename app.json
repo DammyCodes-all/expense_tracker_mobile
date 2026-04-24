@@ -45,18 +45,17 @@
         }
       ],
       [
-        "react-native-vision-camera",
-        {
-          "cameraPermissionText": "Allow camera access for liveness detection",
-          "enableFrameProcessors": true
-        }
-      ],
-      [
         "expo-build-properties",
         {
           "android": {
             "minSdkVersion": 26
           }
+        }
+      ],
+      [
+        "react-native-face-detector-camera",
+        {
+          "cameraPermission": "Allow camera access for liveness detection"
         }
       ]
     ],
