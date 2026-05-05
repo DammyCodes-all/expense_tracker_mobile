@@ -14,9 +14,9 @@ export default function RecentLedgers() {
     <View className="flex-1 bg-white">
       <BackHeader title="Recent Ledger" />
       <ScrollView
-        className="flex-1 px-4"
+        className="flex-1 px-4 web:mx-auto web:w-full web:max-w-[820px] web:px-8"
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 20 }}
+        contentContainerStyle={{ paddingBottom: 48 }}
       >
         {isHydrated ? (
           <>
@@ -54,7 +54,7 @@ export default function RecentLedgers() {
               </Text>
               <Pressable
                 onPress={() => router.push("/add-transaction")}
-                className="w-4/5 rounded-lg bg-blue-900 py-4 items-center"
+                className="w-4/5 rounded-lg bg-blue-900 py-4 items-center web:hover:bg-blue-800 web:active:bg-blue-950"
               >
                 <Text
                   className="text-base text-white"

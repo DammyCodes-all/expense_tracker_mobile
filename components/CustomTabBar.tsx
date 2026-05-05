@@ -30,7 +30,7 @@ export default function CustomTabBar({ state, navigation }: any) {
         elevation: 10,
       }}
     >
-      <View className="flex-row items-center justify-between px-3 py-3">
+      <View className="flex-row items-center justify-between px-3 gap-2 py-3">
         {TAB_CONFIG.map((tab, idx) => {
           const focused = state.index === idx;
           const { Icon } = tab;
@@ -39,7 +39,9 @@ export default function CustomTabBar({ state, navigation }: any) {
             <Pressable
               key={tab.name}
               onPress={() => navigation.navigate(tab.name)}
-              className={`flex-1 items-center gap-0.5 rounded-2xl px-2 py-3 ${focused ? "bg-blue-100" : ""}`}
+              className={`flex-1 items-center gap-0.5 rounded-2xl px-2 py-3 web:hover:bg-slate-200 web:focus-visible:ring-2 web:focus-visible:ring-blue-500 ${
+                focused ? "bg-blue-100" : ""
+              }`}
             >
               <View className="p-2">
                 <Icon
