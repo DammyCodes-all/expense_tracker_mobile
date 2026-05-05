@@ -7,8 +7,8 @@ export default function AppFrame({ children }: { children: ReactNode }) {
   }
 
   return (
-    <View className="min-h-screen bg-[#F7F9FB]">
-      <View className="mx-auto min-h-screen w-full max-w-[1180px]">
+    <View className="min-h-screen bg-[rgb(242,242,242)]">
+      <View className="mx-auto min-h-screen w-full max-w-[1180px] ">
         {children}
       </View>
     </View>
