@@ -59,7 +59,7 @@ export default function Overview() {
           {/* Allocations */}
           <View className="w-full flex mt-4 px-1 web:px-0 flex-row justify-between items-center font-semibold">
             <Text className="text-lg font-sans">Allocations</Text>
-            <Text className="font-semibold text-blue-600 web:hover:text-blue-800">
+            <Text className="font-semibold text-blue-600 cursor-pointer web:hover:text-blue-800">
               View All
             </Text>
           </View>
@@ -94,7 +94,7 @@ export default function Overview() {
             </Pressable>
           </View>
 
-          <View className="mt-4 rounded-3xl web:bg-white web:p-4 web:shadow-sm">
+          <View className="mt-4 rounded-3xl">
             {transactions.slice(0, 5).map((transaction) => (
               <TransactionCard key={transaction.id} transaction={transaction} />
             ))}

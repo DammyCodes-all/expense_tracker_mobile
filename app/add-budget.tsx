@@ -43,7 +43,7 @@ export default function AddBudget() {
     >
       <BackHeader title="Add Budget" />
 
-      <View className="px-4 py-6 flex gap-3 flex-1 web:mx-auto web:w-full web:max-w-[720px] web:px-8">
+      <View className="px-4 py-6 flex gap-3 flex-1 web:mx-auto web:w-full web:px-8">
         <CategoryCard
           name={name}
           onNameChange={setName}

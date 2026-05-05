@@ -14,7 +14,6 @@ import {
   Modal,
   Platform,
   ScrollView,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
@@ -122,7 +121,10 @@ export default function AddTransaction() {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={Platform.OS === "ios" ? 88 : 88}
     >
-      <View className="mx-4" style={{ flex: 1 }}>
+      <View
+        className="mx-4 web:mx-auto web:w-full web:max-w-[760px] web:px-8"
+        style={{ flex: 1 }}
+      >
         <BackHeader title="Add Transaction" />
 
         <ScrollView
@@ -274,7 +276,7 @@ export default function AddTransaction() {
             <View className="mt-4">
               <TouchableOpacity
                 onPress={handleSave}
-                className="bg-blue-600 rounded-lg py-4"
+                className="bg-blue-600 rounded-lg py-4 web:hover:bg-blue-700 web:active:bg-blue-800"
               >
                 <Text className="text-white font-semibold text-center text-base">
                   Save Up!
@@ -394,31 +396,3 @@ export default function AddTransaction() {
     </KeyboardAvoidingView>
   );
 }
-
-const styles = StyleSheet.create({
-  usdBadge: {
-    borderBottomLeftRadius: 28,
-  },
-  dollarSign: {
-    fontFamily: "Manrope_700Bold",
-    includeFontPadding: false,
-    fontSize: 34,
-    lineHeight: 36,
-    color: "#9CA3AF",
-  },
-  amountInput: {
-    fontFamily: "Manrope_700Bold",
-    includeFontPadding: false,
-    textAlignVertical: "center",
-    paddingVertical: 0,
-    lineHeight: 76,
-    height: 76,
-    fontSize: 56,
-    color: "#0f172a",
-  },
-  dollarContainer: {
-    height: 76,
-    justifyContent: "center",
-    marginRight: 8,
-  },
-});
