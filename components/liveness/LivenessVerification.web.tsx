@@ -14,14 +14,13 @@ export default function LivenessVerification() {
   const router = useRouter();
   const [cameraStatus, setCameraStatus] = useState<CameraStatus>("idle");
 
-  const canContinue = cameraStatus === "ready";
   const statusText =
     cameraStatus === "checking"
       ? "Checking camera permission..."
       : cameraStatus === "ready"
         ? "Camera available. Continue to dashboard."
         : cameraStatus === "blocked"
-          ? "Camera unavailable in this browser session."
+          ? "Camera unavailable. Web access is still allowed."
           : "Desktop web verification preview";
 
   useEffect(() => {
@@ -72,7 +71,7 @@ export default function LivenessVerification() {
             style={{ fontFamily: "Manrope_500Medium" }}
           >
             Native face detection is not available on web yet, so this build
-            checks browser camera access before continuing.
+            lets you continue while keeping camera access as an optional check.
           </Text>
 
           <View className="mt-6 w-full rounded-3xl border border-[#CFE0F7] bg-[#F7FAFF] p-5">
@@ -96,33 +95,39 @@ export default function LivenessVerification() {
               className="mt-4 text-center text-[13px] leading-[19px] text-[#A04444]"
               style={{ fontFamily: "Manrope_600SemiBold" }}
             >
-              Allow camera access, use HTTPS/localhost, or continue in the
-              native mobile app for full face detection.
+              Browser camera access usually requires localhost, HTTPS, or an
+              Electron permission handler. You can still continue on web.
             </Text>
           ) : null}
 
           <Pressable
-            className={`mt-7 w-full rounded-xl px-6 py-4 ${
-              canContinue ? "bg-[#0E4EDB]" : "bg-[#D7DEE8]"
-            }`}
-            onPress={() => {
-              if (canContinue) {
-                router.replace("/(tabs)/overview");
-                return;
-              }
-
-              setCameraStatus("checking");
-            }}
+            className="mt-7 w-full rounded-xl bg-[#0E4EDB] px-6 py-4"
+            onPress={() => router.replace("/(tabs)/overview")}
           >
             <View className="flex-row items-center justify-center gap-2">
               <Text
                 className="text-[15px] text-white"
                 style={{ fontFamily: "Manrope_700Bold" }}
               >
-                {canContinue ? "Continue" : "Check Camera"}
+                Continue to Dashboard
               </Text>
               <HugeiconsIcon icon={ArrowRight} size={16} color="#fff" />
             </View>
+          </Pressable>
+
+          <Pressable
+            disabled={cameraStatus === "checking"}
+            className="mt-3 w-full rounded-xl border border-[#C8D8EF] px-6 py-3"
+            onPress={() => setCameraStatus("checking")}
+          >
+            <Text
+              className="text-center text-[14px] text-[#0C2A57]"
+              style={{ fontFamily: "Manrope_700Bold" }}
+            >
+              {cameraStatus === "checking"
+                ? "Checking Camera..."
+                : "Check Camera Permission"}
+            </Text>
           </Pressable>
         </View>
       </View>
