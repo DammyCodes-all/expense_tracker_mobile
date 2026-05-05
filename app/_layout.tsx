@@ -8,8 +8,9 @@ import {
 import { Slot } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import { Text as RNText, useColorScheme, View } from "react-native";
+import { Text as RNText, useColorScheme } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import AppFrame from "../components/AppFrame";
 import { TransactionsProvider } from "../context/transactions-context";
 import "./global.css";
 
@@ -62,9 +63,9 @@ export default function RootLayout() {
         edges={["top", "bottom"]}
       >
         <TransactionsProvider>
-          <View className="bg-[#F7F9FB] h-full">
+          <AppFrame>
             <Slot />
-          </View>
+          </AppFrame>
         </TransactionsProvider>
       </SafeAreaView>
     </SafeAreaProvider>

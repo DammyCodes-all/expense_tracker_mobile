@@ -17,10 +17,19 @@ export default function Budgets() {
   return (
     <View className="flex-1 relative">
       <Header />
-      <ScrollView showsVerticalScrollIndicator={false} className="">
-        <View className="mx-4 flex gap-6">
-          <BudgetBurnCard />
-          <SpendingVelocityChart />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 112 }}
+      >
+        <View className="mx-4 flex gap-6 web:mx-auto web:w-full web:max-w-[1080px] web:px-8">
+          <View className="web:flex-row web:gap-6">
+            <View className="web:flex-1">
+              <BudgetBurnCard />
+            </View>
+            <View className="web:flex-1">
+              <SpendingVelocityChart />
+            </View>
+          </View>
           <View className="p-4  bg-white rounded-3xl">
             <Text className=" mb-2 font-sans uppercase font-semibold">
               Category
