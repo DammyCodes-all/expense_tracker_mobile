@@ -36,7 +36,7 @@ export default function Overview() {
         }}
       >
         <View
-          className="mx-4 space-y-6 web:mx-auto web:w-full"
+          className="mx-4 space-y-6 web:mx-auto web:w-full "
           style={{
             maxWidth: Platform.OS === "web" ? 1120 : undefined,
             paddingHorizontal: isWideWeb ? 32 : 0,
@@ -87,7 +87,7 @@ export default function Overview() {
           <View className="w-full flex mt-4 px-1 web:px-0 flex-row justify-between items-center font-semibold">
             <Text className="text-lg font-sans">Recent Ledger</Text>
             <Pressable
-              className="rounded-lg px-2 py-1 web:hover:bg-blue-50"
+              className="rounded-lg px-2 py-1 hover:text-blue-900"
               onPress={() => router.push("/recent-ledgers")}
             >
               <Text className="font-semibold text-blue-600">View All</Text>
@@ -105,7 +105,7 @@ export default function Overview() {
       {/* Floating Action Button */}
       <TouchableOpacity
         onPress={() => router.push("/add-transaction")}
-        className="absolute bottom-6 right-6 web:bottom-28 web:right-10 w-14 h-14 bg-blue-600 rounded-2xl items-center justify-center web:hover:bg-blue-700 web:active:bg-blue-800"
+        className="absolute bottom-6 right-6 w-14 h-14 bg-blue-600 rounded-2xl items-center justify-center web:hover:bg-blue-700 web:active:bg-blue-800"
         style={{
           shadowColor: "#000",
           shadowOffset: { width: 0, height: 4 },

@@ -62,7 +62,7 @@ export default function Budgets() {
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
-              className="-mx-3"
+              className="-mx-3 web:mx-1"
               contentContainerStyle={{ paddingHorizontal: 8, gap: 12 }}
             >
               {(categories || []).map((c) => (
