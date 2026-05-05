@@ -43,7 +43,7 @@ export default function AddBudget() {
     >
       <BackHeader title="Add Budget" />
 
-      <View className="px-4 py-6 flex gap-3 flex-1">
+      <View className="px-4 py-6 flex gap-3 flex-1 web:mx-auto web:w-full web:max-w-[720px] web:px-8">
         <CategoryCard
           name={name}
           onNameChange={setName}
@@ -61,7 +61,7 @@ export default function AddBudget() {
         <View className="mt-4">
           <TouchableOpacity
             onPress={handleSave}
-            className="bg-blue-600 rounded-lg py-4"
+            className="bg-blue-600 rounded-lg py-4 web:hover:bg-blue-700 web:active:bg-blue-800"
           >
             <Text className="text-white font-semibold text-center text-base">
               Save Up!
