@@ -52,7 +52,7 @@ export default function WealthCard({
       <View className="flex-row gap-4">
         <Pressable
           onPress={onDeposit}
-          className="flex-1 rounded-2xl bg-white/10 py-4"
+          className="flex-1 rounded-2xl bg-white/10 py-4 web:hover:bg-white/20 web:active:bg-white/25 web:focus-visible:ring-2 web:focus-visible:ring-white"
         >
           <Text
             className="text-center text-white text-lg"
@@ -64,7 +64,7 @@ export default function WealthCard({
 
         <Pressable
           onPress={onWithdraw}
-          className="flex-1 rounded-2xl bg-white/10 py-4"
+          className="flex-1 rounded-2xl bg-white/10 py-4 web:hover:bg-white/20 web:active:bg-white/25 web:focus-visible:ring-2 web:focus-visible:ring-white"
         >
           <Text
             className="text-center text-white text-lg"

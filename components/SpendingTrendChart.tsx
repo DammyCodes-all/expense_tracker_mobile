@@ -1,11 +1,11 @@
 import { useTransactions } from "@/context/transactions-context";
 import React, { useMemo } from "react";
-import { Text, View } from "react-native";
+import { Platform, Text, useWindowDimensions, View } from "react-native";
 import { LineChart } from "react-native-gifted-charts";
 import { buildSpendingTrendSeries } from "../lib/spending-metrics";
 
 interface SpendingTrendChartProps {
-  data?: Array<{ value: number; label: string }>;
+  data?: { value: number; label: string }[];
   dateRange?: string;
 }
 
@@ -14,6 +14,8 @@ export default function SpendingTrendChart({
   dateRange,
 }: SpendingTrendChartProps) {
   const { transactions } = useTransactions();
+  const { width } = useWindowDimensions();
+  const isWideWeb = Platform.OS === "web" && width >= 920;
 
   const derived = useMemo(
     () => buildSpendingTrendSeries(transactions),
@@ -22,9 +24,12 @@ export default function SpendingTrendChart({
 
   const chartData = data ?? derived.data;
   const resolvedDateRange = dateRange ?? derived.dateRange;
+  const chartSpacing = isWideWeb
+    ? Math.min(82, Math.max(58, (width - 160) / 16))
+    : Math.min(64, Math.max(46, (width - 72) / 6));
 
   return (
-    <View className="mt-6 rounded-3xl bg-white p-4 shadow">
+    <View className="mt-6 rounded-3xl bg-white p-4 shadow web:border web:border-slate-100 web:shadow-sm">
       <View className="mb-4 flex flex-row items-center justify-between">
         <View>
           <Text className="text-lg font-semibold text-gray-800">
@@ -41,7 +46,7 @@ export default function SpendingTrendChart({
           height={200}
           showVerticalLines={false}
           curved
-          spacing={80}
+          spacing={chartSpacing}
           color="#2563eb"
           thickness={3}
           yAxisColor="transparent"

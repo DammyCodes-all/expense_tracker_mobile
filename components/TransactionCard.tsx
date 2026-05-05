@@ -18,7 +18,7 @@ export default function TransactionCard({ transaction }: TransactionCardProps) {
     TRANSACTION_ICON_COMPONENTS.note;
 
   return (
-    <View className="mb-4 flex flex-row items-center rounded-xl bg-gray-200 p-4">
+    <View className="mb-4 flex flex-row items-center rounded-xl bg-gray-200 p-4 web:hover:bg-gray-300 ">
       <View className="mr-4 flex h-10 w-10 items-center justify-center rounded-xl bg-white">
         <HugeiconsIcon icon={iconObject} className="text-blue-600" size={20} />
       </View>

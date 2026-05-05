@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, Platform, Text, View } from "react-native";
+import { Image, Platform, Pressable, Text, View } from "react-native";
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import { BellDotIcon } from "@hugeicons/core-free-icons";
 
@@ -31,9 +31,9 @@ export default function Header() {
           </Text>
         </View>
 
-        <View className="p-3 rounded-xl grid place-items-center bg-white shadow-sm">
+        <Pressable className="p-3 rounded-xl bg-white shadow-sm web:hover:bg-blue-50 web:hover:shadow-md web:focus-visible:ring-2 web:focus-visible:ring-blue-500">
           <HugeiconsIcon icon={BellDotIcon} size={24} />
-        </View>
+        </Pressable>
       </View>
     </View>
   );

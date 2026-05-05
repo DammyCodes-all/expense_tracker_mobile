@@ -2,7 +2,7 @@ import { useTransactions } from "@/context/transactions-context";
 import { PieChart } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react-native";
 import React, { useMemo } from "react";
-import { Text, View } from "react-native";
+import { Platform, Text, useWindowDimensions, View } from "react-native";
 import {
   buildBudgetSummary,
   buildSpendingVelocitySeries,
@@ -24,6 +24,8 @@ export default function SpendingVelocityChart({
   remaining,
 }: Props) {
   const { transactions, categories } = useTransactions();
+  const { width } = useWindowDimensions();
+  const isWideWeb = Platform.OS === "web" && width >= 920;
 
   const derived = useMemo(
     () => buildSpendingVelocitySeries(transactions),
@@ -39,9 +41,11 @@ export default function SpendingVelocityChart({
   const MAX_HEIGHT = 120; // px
   const seriesMax = Math.max(...chartBaseline, ...chartData, 1);
   const isPositive = chartPercentChange >= 0;
+  const barSlotWidth = isWideWeb ? 42 : 30;
+  const barWidth = isWideWeb ? 26 : 20;
 
   return (
-    <View className="rounded-2xl bg-white p-4 shadow-sm">
+    <View className="rounded-2xl bg-white p-4 shadow-sm web:border web:border-slate-100">
       <View className="flex-row items-start justify-between mb-8">
         <View>
           <Text
@@ -78,12 +82,16 @@ export default function SpendingVelocityChart({
           const actualHeight = Math.round((val / seriesMax) * MAX_HEIGHT);
 
           return (
-            <View key={idx} className="items-center" style={{ width: 30 }}>
+            <View
+              key={idx}
+              className="items-center"
+              style={{ width: barSlotWidth }}
+            >
               <View
                 className="rounded-t-md"
                 style={{
                   height: baselineHeight,
-                  width: 20,
+                  width: barWidth,
                   backgroundColor: "#E6EEF9",
                   alignItems: "center",
                   justifyContent: "flex-end",
